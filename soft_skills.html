@@ -91,7 +91,7 @@
             padding: 1rem 0;
             width: 100%;
             margin-bottom: 1rem;
-            margin-top: 18px;
+            margin-top: 40px;
             opacity: 0;
             visibility: hidden;
             transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
@@ -135,6 +135,35 @@
             transform: scale(1.1);
         }
 
+        /* New scrollable container */
+        .scroll-container {
+            width: 100%;
+            height: calc(100vh - 150px);
+            overflow-y: auto;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(242, 195, 139, 0.3) rgba(15, 12, 8, 0.5);
+        }
+
+        .scroll-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .scroll-container::-webkit-scrollbar-track {
+            background: rgba(15, 12, 8, 0.8);
+            border-radius: 10px;
+        }
+        
+        .scroll-container::-webkit-scrollbar-thumb {
+            background: rgba(242, 195, 139, 0.8);
+            border-radius: 10px;
+        }
+        
+        .scroll-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(242, 195, 139, 0.6);
+        }
+
+        /* Cards container */
         .cards-container {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -142,13 +171,12 @@
             gap: 1rem;
             width: 90%;
             max-width: 1200px;
-            height: calc(100vh - 150px);
-            max-height: 700px;
             margin: 0 auto;
             padding: 1rem;
             opacity: 0;
             visibility: hidden;
             transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+            min-height: 700px;
         }
 
         .cards-container.visible {
@@ -160,6 +188,7 @@
             position: relative;
             width: 100%;
             height: 100%;
+            min-height: 200px;
             perspective: 1500px;
             cursor: pointer;
         }
@@ -336,7 +365,7 @@
             .cards-container {
                 grid-template-columns: repeat(3, 1fr);
                 grid-template-rows: repeat(3, 1fr);
-                height: calc(100vh - 120px);
+                min-height: 800px;
             }
         }
 
@@ -344,6 +373,7 @@
             .cards-container {
                 grid-template-columns: repeat(2, 1fr);
                 grid-template-rows: repeat(4, 1fr);
+                min-height: 900px;
             }
             
             .card-title {
@@ -364,14 +394,13 @@
                 grid-template-columns: repeat(2, 1fr);
                 grid-template-rows: repeat(4, 1fr);
                 gap: 0.5rem;
+                min-height: 1000px;
             }
         }
 
         @media (max-height: 500px) {
-            .cards-container {
+            .scroll-container {
                 height: calc(100vh - 100px);
-                grid-template-columns: repeat(4, 1fr);
-                grid-template-rows: repeat(2, 1fr);
             }
             
             h1 {
@@ -394,129 +423,132 @@
         <h1>The Inner Light</h1>
     </header>
     
-    <div class="cards-container" id="cardsContainer">
-        <div class="card" data-skill="communication">
-            <div class="card-inner">
-                <div class="card-front">
-                    <img src="./icons/communication.png" alt="Communication" class="card-icon">
-                    <div class="card-title">Communication</div>
-                </div>
-                <div class="card-back">
-                    <h3>Communication</h3>
-                    <ul>
-                        <li>Explaining technical concepts to non-technical people</li>
-                        <li>Writing clear documentation or reports</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        
-        <div class="card" data-skill="teamwork">
-            <div class="card-inner">
-                <div class="card-front">
-                    <img src="./icons/teamwork.png" alt="Teamwork" class="card-icon">
-                    <div class="card-title">Teamwork & Collaboration</div>
-                </div>
-                <div class="card-back">
-                    <h3>Teamwork & Collaboration</h3>
-                    <ul>
-                        <li>Working well in group projects, open source, or Agile teams</li>
-                        <li>Using tools like Git to collaborate efficiently</li>
-                    </ul>
+    <!-- New scrollable container -->
+    <div class="scroll-container">
+        <div class="cards-container" id="cardsContainer">
+            <div class="card" data-skill="communication">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img src="./icons/communication.png" alt="Communication" class="card-icon">
+                        <div class="card-title">Communication</div>
+                    </div>
+                    <div class="card-back">
+                        <h3>Communication</h3>
+                        <ul>
+                            <li>Explaining technical concepts to non-technical people</li>
+                            <li>Writing clear documentation or reports</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="card" data-skill="problem_solving">
-            <div class="card-inner">
-                <div class="card-front">
-                    <img src="./icons/problem_solving.png" alt="Problem Solving" class="card-icon">
-                    <div class="card-title">Problem Solving</div>
-                </div>
-                <div class="card-back">
-                    <h3>Problem Solving</h3>
-                    <ul>
-                        <li>Debugging and planning with a structured mindset</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        
-        <div class="card" data-skill="adaptability">
-            <div class="card-inner">
-                <div class="card-front">
-                    <img src="./icons/adaptability.png" alt="Adaptability" class="card-icon">
-                    <div class="card-title">Adaptability</div>
-                </div>
-                <div class="card-back">
-                    <h3>Adaptability</h3>
-                    <ul>
-                        <li>Learning new languages, frameworks, or adjusting to new team environments quickly</li>
-                        <li>Embracing change and evolving technologies</li>
-                    </ul>
+            
+            <div class="card" data-skill="teamwork">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img src="./icons/teamwork.png" alt="Teamwork" class="card-icon">
+                        <div class="card-title">Teamwork & Collaboration</div>
+                    </div>
+                    <div class="card-back">
+                        <h3>Teamwork & Collaboration</h3>
+                        <ul>
+                            <li>Working well in group projects, open source, or Agile teams</li>
+                            <li>Using tools like Git to collaborate efficiently</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="card" data-skill="time_management">
-            <div class="card-inner">
-                <div class="card-front">
-                    <img src="./icons/time_management.png" alt="Time Management" class="card-icon">
-                    <div class="card-title">Time Management</div>
-                </div>
-                <div class="card-back">
-                    <h3>Time Management</h3>
-                    <ul>
-                        <li>Balancing multiple deadlines (school + side projects + maybe even work)</li>
-                        <li>Keeps a todo list</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        
-        <div class="card" data-skill="Hardwork">
-            <div class="card-inner">
-                <div class="card-front">
-                    <img src="./icons/hardwork.png" alt="Hard Work" class="card-icon">
-                    <div class="card-title">Hardwork</div>
-                </div>
-                <div class="card-back">
-                    <h3>Hardwork</h3>
-                    <ul>
-                        <li>Does not give up easily</li>
-                    </ul>
+            
+            <div class="card" data-skill="problem_solving">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img src="./icons/problem_solving.png" alt="Problem Solving" class="card-icon">
+                        <div class="card-title">Problem Solving</div>
+                    </div>
+                    <div class="card-back">
+                        <h3>Problem Solving</h3>
+                        <ul>
+                            <li>Debugging and planning with a structured mindset</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="card" data-skill="leadership">
-            <div class="card-inner">
-                <div class="card-front">
-                    <img src="./icons/leadership.png" alt="Leadership" class="card-icon">
-                    <div class="card-title">Leadership</div>
-                </div>
-                <div class="card-back">
-                    <h3>Leadership</h3>
-                    <ul>
-                        <li>Leading a team project</li>
-                        <li>Mentoring others or taking initiative</li>
-                    </ul>
+            
+            <div class="card" data-skill="adaptability">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img src="./icons/adaptability.png" alt="Adaptability" class="card-icon">
+                        <div class="card-title">Adaptability</div>
+                    </div>
+                    <div class="card-back">
+                        <h3>Adaptability</h3>
+                        <ul>
+                            <li>Learning new languages, frameworks, or adjusting to new team environments quickly</li>
+                            <li>Embracing change and evolving technologies</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="card" data-skill="attention_to_detail">
-            <div class="card-inner">
-                <div class="card-front">
-                    <img src="./icons/attention_to_detail.png" alt="Attention to Detail" class="card-icon">
-                    <div class="card-title">Attention to Detail</div>
+            
+            <div class="card" data-skill="time_management">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img src="./icons/time_management.png" alt="Time Management" class="card-icon">
+                        <div class="card-title">Time Management</div>
+                    </div>
+                    <div class="card-back">
+                        <h3>Time Management</h3>
+                        <ul>
+                            <li>Balancing multiple deadlines (school + side projects + maybe even work)</li>
+                            <li>Keeps a todo list</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="card-back">
-                    <h3>Attention to Detail</h3>
-                    <ul>
-                        <li>Writing clean, maintainable code</li>
-                        <li>Spotting issues during code review or QA</li>
-                    </ul>
+            </div>
+            
+            <div class="card" data-skill="Hardwork">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img src="./icons/hardwork.png" alt="Hard Work" class="card-icon">
+                        <div class="card-title">Hardwork</div>
+                    </div>
+                    <div class="card-back">
+                        <h3>Hardwork</h3>
+                        <ul>
+                            <li>Does not give up easily</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-skill="leadership">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img src="./icons/leadership.png" alt="Leadership" class="card-icon">
+                        <div class="card-title">Leadership</div>
+                    </div>
+                    <div class="card-back">
+                        <h3>Leadership</h3>
+                        <ul>
+                            <li>Leading a team project</li>
+                            <li>Mentoring others or taking initiative</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-skill="attention_to_detail">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img src="./icons/attention_to_detail.png" alt="Attention to Detail" class="card-icon">
+                        <div class="card-title">Attention to Detail</div>
+                    </div>
+                    <div class="card-back">
+                        <h3>Attention to Detail</h3>
+                        <ul>
+                            <li>Writing clean, maintainable code</li>
+                            <li>Spotting issues during code review or QA</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

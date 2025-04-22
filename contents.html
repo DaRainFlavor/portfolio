@@ -97,7 +97,7 @@
             padding: 1rem 0;
             width: 100%;
             margin-bottom: 1rem;
-            margin-top: 18px;
+            margin-top: 40px;
             opacity: 0;
             visibility: hidden;
             transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
@@ -113,6 +113,13 @@
             letter-spacing: 0.1em;
             text-transform: uppercase;
             font-weight: 700;
+        }
+
+        .contents-container {
+            width: 100%;
+            height: calc(100vh - 150px);
+            overflow-y: auto;
+            padding: 1rem 0;
         }
 
         .contents-list {
@@ -202,6 +209,30 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        .contents-container {
+            overflow-y: auto; 
+            scrollbar-width: thin;
+            scrollbar-color: rgba(242, 195, 139, 0.3) rgba(15, 12, 8, 0.5);
+        }
+
+        .contents-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .contents-container::-webkit-scrollbar-track {
+            background: rgba(15, 12, 8, 0.8);
+            border-radius: 10px;
+        }
+        
+        .contents-container::-webkit-scrollbar-thumb {
+            background: rgba(242, 195, 139, 0.8);
+            border-radius: 10px;
+        }
+        
+        .contents-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(242, 195, 139, 0.6);
+        }
+
         @media (orientation: portrait) {
             .header {
                 padding: 1rem 0;
@@ -273,41 +304,43 @@
         <h1>Table of Contents</h1>
     </header>
     
-    <ul class="contents-list" id="contentsList">
-        <li class="owner-row">
-            <div class="content-item">
-                <img src="./icons/owner.png" alt="Owner Icon" class="content-icon">
-                <div class="content-text">About the Owner</div>
-            </div>
-        </li>
-        
-        <li class="main-grid">
-            <div class="content-item"><em></em>
-                <img src="./icons/project.png" alt="Projects Icon" class="content-icon">
-                <div class="content-text">Tomes of Creation<br>(Projects)</div>
-            </div>
-            <div class="content-item">
-                <img src="./icons/musicArt.png" alt="Creative Icon" class="content-icon">
-                <div class="content-text">Melodies and Visions<br>(Creative Section)</div>
-            </div>
-            <div class="content-item">
-                <img src="./icons/tools.png" alt="Tech Stack Icon" class="content-icon">
-                <div class="content-text">Arcane Tools<br>(Tech Stack)</div>
-            </div>
-            <div class="content-item">
-                <img src="./icons/certificate.png" alt="Certificates Icon" class="content-icon">
-                <div class="content-text">Seals & Honors<br>(Certificates)</div>
-            </div>
-            <div class="content-item">
-                <img src="./icons/heart.png" alt="Soft Skills Icon" class="content-icon">
-                <div class="content-text">The Inner Light<br>(Soft Skills)</div>
-            </div>
-            <div class="content-item">
-                <img src="./icons/contact.png" alt="Contact Icon" class="content-icon">
-                <div class="content-text">Whispers Across Realms<br>(Contact/Socials)</div>
-            </div>
-        </li>
-    </ul>
+    <div class="contents-container">
+        <ul class="contents-list" id="contentsList">
+            <li class="owner-row">
+                <div class="content-item">
+                    <img src="./icons/owner.png" alt="Owner Icon" class="content-icon">
+                    <div class="content-text">About the Owner</div>
+                </div>
+            </li>
+            
+            <li class="main-grid">
+                <div class="content-item"><em></em>
+                    <img src="./icons/project.png" alt="Projects Icon" class="content-icon">
+                    <div class="content-text">Tomes of Creation<br>(Projects)</div>
+                </div>
+                <div class="content-item">
+                    <img src="./icons/musicArt.png" alt="Creative Icon" class="content-icon">
+                    <div class="content-text">Melodies and Visions<br>(Creative Section)</div>
+                </div>
+                <div class="content-item">
+                    <img src="./icons/tools.png" alt="Tech Stack Icon" class="content-icon">
+                    <div class="content-text">Arcane Tools<br>(Tech Stack)</div>
+                </div>
+                <div class="content-item">
+                    <img src="./icons/certificate.png" alt="Certificates Icon" class="content-icon">
+                    <div class="content-text">Seals & Honors<br>(Certificates)</div>
+                </div>
+                <div class="content-item">
+                    <img src="./icons/heart.png" alt="Soft Skills Icon" class="content-icon">
+                    <div class="content-text">The Inner Light<br>(Soft Skills)</div>
+                </div>
+                <div class="content-item">
+                    <img src="./icons/contact.png" alt="Contact Icon" class="content-icon">
+                    <div class="content-text">Whispers Across Realms<br>(Contact/Socials)</div>
+                </div>
+            </li>
+        </ul>
+    </div>
 
     <script>
         // Preload images

@@ -91,8 +91,8 @@
             text-align: center;
             padding: 1rem 0;
             width: 100%;
-            margin-bottom: 0.5rem;
-            margin-top: 18px;
+            margin-bottom: 1rem;
+            margin-top: 40px;
             opacity: 0;
             visibility: hidden;
             transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
@@ -126,6 +126,33 @@
             visibility: visible;
         }
 
+        .contents-container {
+            width: 100%;
+            height: calc(100vh - 150px);
+            overflow-y: auto;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(242, 195, 139, 0.3) rgba(15, 12, 8, 0.5);
+        }
+
+        .contents-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .contents-container::-webkit-scrollbar-track {
+            background: rgba(15, 12, 8, 0.8);
+            border-radius: 10px;
+        }
+        
+        .contents-container::-webkit-scrollbar-thumb {
+            background: rgba(242, 195, 139, 0.8);
+            border-radius: 10px;
+        }
+        
+        .contents-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(242, 195, 139, 0.6);
+        }
+
         .main-container {
             display: flex;
             width: 90%;
@@ -135,8 +162,7 @@
             opacity: 0;
             visibility: hidden;
             transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
-            height: calc(100vh - 200px);
-            max-height: 600px;
+            padding-bottom: 2rem;
         }
 
         .main-container.visible {
@@ -152,9 +178,7 @@
             border: 1px solid rgba(242, 195, 139, 0.3);
             border-radius: 5px;
             padding: 1rem;
-            height: 100%;
             position: relative;
-            overflow: hidden;
         }
 
         .column::before {
@@ -188,26 +212,7 @@
         }
 
         .column-content {
-            overflow-y: auto;
             flex-grow: 1;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(242, 195, 139, 0.3) rgba(15, 12, 8, 0.5);
-            padding-right: 5px;
-            margin-right: -5px;
-        }
-
-        .column-content::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .column-content::-webkit-scrollbar-track {
-            background: rgba(15, 12, 8, 0.5);
-            border-radius: 3px;
-        }
-
-        .column-content::-webkit-scrollbar-thumb {
-            background-color: rgba(242, 195, 139, 0.3);
-            border-radius: 3px;
         }
 
         .music-item {
@@ -489,14 +494,7 @@
         @media (max-width: 768px) {
             .main-container {
                 flex-direction: column;
-                height: auto;
-                max-height: none;
                 gap: 1rem;
-            }
-            
-            .column {
-                height: auto;
-                max-height: 500px;
             }
             
             .art-grid {
@@ -557,95 +555,97 @@
         Aside from pure coding, I also have interest in creating music and art and some of them blend in and are used to my developed programs.
     </div>
     
-    <div class="main-container" id="mainContainer">
-        <!-- Music Column -->
-        <div class="column">
-            <h2 class="column-title">Music Compositions</h2>
-            <div class="column-content">
-                <div class="music-item" data-src="./music/Adrian Vaflor - The Astral.m4a">
-                    <div class="play-button">
-                        <div class="play-icon"></div>
-                        <div class="pause-icon"></div>
+    <div class="contents-container">
+        <div class="main-container" id="mainContainer">
+            <!-- Music Column -->
+            <div class="column">
+                <h2 class="column-title">Music Compositions</h2>
+                <div class="column-content">
+                    <div class="music-item" data-src="./music/Adrian Vaflor - The Astral.m4a">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                            <div class="pause-icon"></div>
+                        </div>
+                        <div class="music-title">The Astral</div>
+                        <audio class="audio-element" preload="none"></audio>
                     </div>
-                    <div class="music-title">The Astral</div>
-                    <audio class="audio-element" preload="none"></audio>
-                </div>
-                
-                <div class="music-item" data-src="./music/Adrian Vaflor - 9 Mazes of Hell (Intro and Main Menu).m4a">
-                    <div class="play-button">
-                        <div class="play-icon"></div>
-                        <div class="pause-icon"></div>
+                    
+                    <div class="music-item" data-src="./music/Adrian Vaflor - 9 Mazes of Hell (Intro and Main Menu).m4a">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                            <div class="pause-icon"></div>
+                        </div>
+                        <div class="music-title">9 Mazes of Hell (Intro & Main Menu)</div>
+                        <audio class="audio-element" preload="none"></audio>
                     </div>
-                    <div class="music-title">9 Mazes of Hell (Intro & Main Menu)</div>
-                    <audio class="audio-element" preload="none"></audio>
-                </div>
-                
-                <div class="music-item" data-src="./music/Adrian Vaflor - 9 Mazes of Hell (Game Loop).m4a">
-                    <div class="play-button">
-                        <div class="play-icon"></div>
-                        <div class="pause-icon"></div>
+                    
+                    <div class="music-item" data-src="./music/Adrian Vaflor - 9 Mazes of Hell (Game Loop).m4a">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                            <div class="pause-icon"></div>
+                        </div>
+                        <div class="music-title">9 Mazes of Hell (Game Loop)</div>
+                        <audio class="audio-element" preload="none"></audio>
                     </div>
-                    <div class="music-title">9 Mazes of Hell (Game Loop)</div>
-                    <audio class="audio-element" preload="none"></audio>
-                </div>
-                
-                <div class="music-item" data-src="./music/Adrian Vaflor - Long Live Majamaraja.m4a">
-                    <div class="play-button">
-                        <div class="play-icon"></div>
-                        <div class="pause-icon"></div>
+                    
+                    <div class="music-item" data-src="./music/Adrian Vaflor - Long Live Majamaraja.m4a">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                            <div class="pause-icon"></div>
+                        </div>
+                        <div class="music-title">Long Live, Majamaraja!</div>
+                        <audio class="audio-element" preload="none"></audio>
                     </div>
-                    <div class="music-title">Long Live, Majamaraja!</div>
-                    <audio class="audio-element" preload="none"></audio>
-                </div>
-                
-                <div class="music-item" data-src="./music/Adrian Vaflor - Failure Sonata.m4a">
-                    <div class="play-button">
-                        <div class="play-icon"></div>
-                        <div class="pause-icon"></div>
+                    
+                    <div class="music-item" data-src="./music/Adrian Vaflor - Failure Sonata.m4a">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                            <div class="pause-icon"></div>
+                        </div>
+                        <div class="music-title">Failure Sonata</div>
+                        <audio class="audio-element" preload="none"></audio>
                     </div>
-                    <div class="music-title">Failure Sonata</div>
-                    <audio class="audio-element" preload="none"></audio>
-                </div>
-                
-                <div class="music-item" data-src="./music/Adrian Vaflor - Color Grid.m4a">
-                    <div class="play-button">
-                        <div class="play-icon"></div>
-                        <div class="pause-icon"></div>
+                    
+                    <div class="music-item" data-src="./music/Adrian Vaflor - Color Grid.m4a">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                            <div class="pause-icon"></div>
+                        </div>
+                        <div class="music-title">Color Grid</div>
+                        <audio class="audio-element" preload="none"></audio>
                     </div>
-                    <div class="music-title">Color Grid</div>
-                    <audio class="audio-element" preload="none"></audio>
                 </div>
             </div>
-        </div>
-        
-        <!-- Art Column -->
-        <div class="column">
-            <h2 class="column-title">Artworks</h2>
-            <div class="column-content">
-                <div class="art-grid">
-                    <div class="art-card" data-img="./artworks/Light Up the Philippines.jpg">
-                        <img src="./artworks/Light Up the Philippines.jpg" alt="Light Up The Philippines" class="art-image">
-                        <div class="art-title">Light Up The Philippines</div>
-                    </div>
-                    
-                    <div class="art-card" data-img="./artworks/Adam and Eve.jpg">
-                        <img src="artworks/Adam and Eve.jpg" alt="Adam and Eve" class="art-image">
-                        <div class="art-title">Adam and Eve</div>
-                    </div>
-                    
-                    <div class="art-card" data-img="./artworks/Modulo Art.png">
-                        <img src="./artworks/Modulo Art.png" alt="Modulo Art" class="art-image">
-                        <div class="art-title">Modulo Art</div>
-                    </div>
-                     <!-- <div class="art-card" data-title="Color Rush Logo" data-desc="Digital Art" data-img="./artworks/Color Rush Logo.png">  -->
-                    <div class="art-card" data-img="./artworks/Color Rush Logo.png">
-                        <img src="./artworks/Color Rush Logo.png" alt="Color Rush Logo" class="art-image">
-                        <div class="art-title">Color Rush Logo</div>
-                    </div>
+            
+            <!-- Art Column -->
+            <div class="column">
+                <h2 class="column-title">Artworks</h2>
+                <div class="column-content">
+                    <div class="art-grid">
+                        <div class="art-card" data-img="./artworks/Light Up the Philippines.jpg">
+                            <img src="./artworks/Light Up the Philippines.jpg" alt="Light Up The Philippines" class="art-image">
+                            <div class="art-title">Light Up The Philippines</div>
+                        </div>
+                        
+                        <div class="art-card" data-img="./artworks/Adam and Eve.jpg">
+                            <img src="artworks/Adam and Eve.jpg" alt="Adam and Eve" class="art-image">
+                            <div class="art-title">Adam and Eve</div>
+                        </div>
+                        
+                        <div class="art-card" data-img="./artworks/Modulo Art.png">
+                            <img src="./artworks/Modulo Art.png" alt="Modulo Art" class="art-image">
+                            <div class="art-title">Modulo Art</div>
+                        </div>
+                         <!-- <div class="art-card" data-title="Color Rush Logo" data-desc="Digital Art" data-img="./artworks/Color Rush Logo.png">  -->
+                        <div class="art-card" data-img="./artworks/Color Rush Logo.png">
+                            <img src="./artworks/Color Rush Logo.png" alt="Color Rush Logo" class="art-image">
+                            <div class="art-title">Color Rush Logo</div>
+                        </div>
 
-                    <div class="art-card" data-img="./artworks/Beeznet Logo.jpg">
-                        <img src="./artworks/Beeznet Logo.jpg" alt="Beeznet Logo" class="art-image">
-                        <div class="art-title">Beeznet Logo</div>
+                        <div class="art-card" data-img="./artworks/Beeznet Logo.jpg">
+                            <img src="./artworks/Beeznet Logo.jpg" alt="Beeznet Logo" class="art-image">
+                            <div class="art-title">Beeznet Logo</div>
+                        </div>
                     </div>
                 </div>
             </div>

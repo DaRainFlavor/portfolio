@@ -92,7 +92,7 @@
             padding: 1rem 0;
             width: 100%;
             margin-bottom: 1rem;
-            margin-top: 18px;
+            margin-top: 40px;
             opacity: 0;
             visibility: hidden;
             transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
@@ -110,6 +110,14 @@
             font-weight: 700;
         }
 
+        /* New scrollable container */
+        .scroll-container {
+            width: 100%;
+            height: calc(100vh - 150px);
+            overflow-y: auto;
+            padding: 1rem 0;
+        }
+
         .main-content {
             display: flex;
             flex-wrap: wrap;
@@ -119,6 +127,7 @@
             margin: 0 auto;
             gap: 2rem;
             position: relative;
+            min-height: 100%;
         }
 
         .project-container {
@@ -324,6 +333,31 @@
             transform: scale(1.1);
         }
 
+        /* Scrollbar styles */
+        .scroll-container {
+            overflow-y: auto; /* Enable vertical scrolling */
+            scrollbar-width: thin; /* For Firefox */
+            scrollbar-color: rgba(242, 195, 139, 0.3) rgba(15, 12, 8, 0.5);
+        }
+
+        .scroll-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .scroll-container::-webkit-scrollbar-track {
+            background: rgba(15, 12, 8, 0.8);
+            border-radius: 10px;
+        }
+        
+        .scroll-container::-webkit-scrollbar-thumb {
+            background: rgba(242, 195, 139, 0.8);
+            border-radius: 10px;
+        }
+        
+        .scroll-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(242, 195, 139, 0.6);
+        }
+
         @media (max-width: 768px) {
             .project-content {
                 flex-direction: column;
@@ -396,217 +430,218 @@
         <h1>Tomes of Creation</h1>
     </header>
     
-    <main class="main-content">
-        <!-- Project 1: Color Rush -->
-        <div class="project-container active" id="project-1">
-            <div class="project-content">
-                <div class="left-column">
-                    <h2 class="project-title">Color Rush</h2>
-                    
-                    <div class="project-media">
-                        <video class="project-video" controls poster="./projects/color-rush-preview.png">
-                            <source src="https://res.cloudinary.com/dqi7yzgm2/video/upload/v1745297291/Color_Rush_Trailer_fzf5tj.mp4" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
+    <div class="scroll-container">
+        <main class="main-content">
+            <!-- Project 1: Color Rush -->
+            <div class="project-container active" id="project-1">
+                <div class="project-content">
+                    <div class="left-column">
+                        <h2 class="project-title">Color Rush</h2>
+                        
+                        <div class="project-media">
+                            <video class="project-video" controls poster="./projects/color-rush-preview.png">
+                                <source src="https://res.cloudinary.com/dqi7yzgm2/video/upload/v1745297291/Color_Rush_Trailer_fzf5tj.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        
+                        <a href="https://github.com/DaRainFlavor/Color-Rush" class="github-link" target="_blank">
+                            View on GitHub
+                        </a>
                     </div>
                     
-                    <a href="https://github.com/DaRainFlavor/Color-Rush" class="github-link" target="_blank">
-                        View on GitHub
-                    </a>
-                </div>
-                
-                <div class="right-column">
-                    <div class="project-details">
-                        <p class="project-description">
-                            A game from CS 123 class showcasing the use of data structures and graph traversal. 
-                            It is a flood filling game where the player is given number of moves to fill the grid to a single color.
-                        </p>
-                        
-                        <div class="detail-section">
-                            <div class="detail-title">Tech Stack:</div>
-                            <div class="detail-content">
-                                <ul>
-                                    <li>C++</li>
-                                    <li>SFML</li>
-                                </ul>
+                    <div class="right-column">
+                        <div class="project-details">
+                            <p class="project-description">
+                                A game from CS 123 class showcasing the use of data structures and graph traversal. 
+                                It is a flood filling game where the player is given number of moves to fill the grid to a single color.
+                            </p>
+                            
+                            <div class="detail-section">
+                                <div class="detail-title">Tech Stack:</div>
+                                <div class="detail-content">
+                                    <ul>
+                                        <li>C++</li>
+                                        <li>SFML</li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <div class="detail-title">Role:</div>
-                            <div class="detail-content">
-                                Indie Developer and Designer
+                            
+                            <div class="detail-section">
+                                <div class="detail-title">Role:</div>
+                                <div class="detail-content">
+                                    Solo Developer
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <div class="detail-title">Development Insights:</div>
-                            <div class="detail-content">
-                                This project demonstrates the use of pointers, the application of BFS traversal, 
-                                file reading and file writing, and a solver that uses my developed n-depth solution algorithm.
+                            
+                            <div class="detail-section">
+                                <div class="detail-title">Development Insights:</div>
+                                <div class="detail-content">
+                                    This project demonstrates the use of pointers, the application of BFS traversal, 
+                                    file reading and file writing, and a solver that uses my developed n-depth solution algorithm.
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Project 2: Compiley Studio & BrainRot -->
-        <div class="project-container" id="project-2">
-            <div class="project-content">
-                <div class="left-column">
-                    <h2 class="project-title">Compiley Studio & BrainRot</h2>
-                    
-                    <div class="project-media">
-                        <video class="project-video" controls poster="./projects/compiley-studio-brainrot-preview.png">
-                            <source src="https://res.cloudinary.com/dqi7yzgm2/video/upload/v1745297428/Compiley_Studio_and_Brainrot_demo_yiexi0.mp4" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
+            <!-- Project 2: Compiley Studio & BrainRot -->
+            <div class="project-container" id="project-2">
+                <div class="project-content">
+                    <div class="left-column">
+                        <h2 class="project-title">Compiley Studio & BrainRot</h2>
+                        
+                        <div class="project-media">
+                            <video class="project-video" controls poster="./projects/compiley-studio-brainrot-preview.png">
+                                <source src="https://res.cloudinary.com/dqi7yzgm2/video/upload/v1745297428/Compiley_Studio_and_Brainrot_demo_yiexi0.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        
+                        <a href="https://github.com/DaRainFlavor/CMSC-124-PL-Project" class="github-link" target="_blank">
+                            View on GitHub
+                        </a>
                     </div>
                     
-                    <a href="https://github.com/DaRainFlavor/CMSC-124-PL-Project" class="github-link" target="_blank">
-                        View on GitHub
-                    </a>
-                </div>
-                
-                <div class="right-column">
-                    <div class="project-details">
-                        <p class="project-description">
-                            An all-in-one IDE, compiler, and esoteric programming language combined whose syntax is inspired by Gen-Z and Gen Alpha terms and slang.
-                        </p>
-                        
-                        <div class="detail-section">
-                            <div class="detail-title">Tech Stack:</div>
-                            <div class="detail-content">
-                                <ul>
-                                    <li>Python</li>
-                                    <li>Tkinter</li>
-                                    <li>MIPS</li>
-                                </ul>
+                    <div class="right-column">
+                        <div class="project-details">
+                            <p class="project-description">
+                                An all-in-one IDE, compiler, and esoteric programming language combined whose syntax is inspired by Gen-Z and Gen Alpha terms and slang.
+                            </p>
+                            
+                            <div class="detail-section">
+                                <div class="detail-title">Tech Stack:</div>
+                                <div class="detail-content">
+                                    <ul>
+                                        <li>Python</li>
+                                        <li>Tkinter</li>
+                                        <li>MIPS</li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <div class="detail-title">Role:</div>
-                            <div class="detail-content">
-                                Project Lead / Primary Developer
+                            
+                            <div class="detail-section">
+                                <div class="detail-title">Role:</div>
+                                <div class="detail-content">
+                                    Project Lead / Primary Developer
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <div class="detail-title">Development Insights:</div>
-                            <div class="detail-content">
-                                This has been the most challenging, time-consuming, and fulfilling project I've ever created. It pushed me to dive deep into IDE development, grammar and parser design, language translation, syntax and semantics, speech to text, assembly, and even AI.
+                            
+                            <div class="detail-section">
+                                <div class="detail-title">Development Insights:</div>
+                                <div class="detail-content">
+                                    This has been the most challenging, time-consuming, and fulfilling project I've ever created. It pushed me to dive deep into IDE development, grammar and parser design, language translation, syntax and semantics, speech to text, assembly, and even AI.
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Project 3: Inspectify - Added mobile-video class -->
-        <div class="project-container" id="project-3">
-            <div class="project-content">
-                <div class="left-column">
-                    <h2 class="project-title">Inspectify (In Progress)</h2>
-                    
-                    <div class="project-media">
-                        <video class="project-video mobile-video" controls poster="./projects/inspectify-preview.png">
-                            <source src="https://res.cloudinary.com/dqi7yzgm2/video/upload/v1745297501/inspectify_hu19a6.mp4" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
+            <!-- Project 3: Inspectify - Added mobile-video class -->
+            <div class="project-container" id="project-3">
+                <div class="project-content">
+                    <div class="left-column">
+                        <h2 class="project-title">Inspectify (In Progress)</h2>
+                        
+                        <div class="project-media">
+                            <video class="project-video mobile-video" controls poster="./projects/inspectify-preview.png">
+                                <source src="https://res.cloudinary.com/dqi7yzgm2/video/upload/v1745297501/inspectify_hu19a6.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        
+                        <h1 class="github-link">
+                            Currently in Progress apk file
+                        </h1>
                     </div>
                     
-                    <h1 class="github-link">
-                        Currently in Progress apk file
-                    </h1>
-                </div>
-                
-                <div class="right-column">
-                    <div class="project-details">
-                        <p class="project-description">
-                            An AI-powered home assessment app that analyzes uploaded or taken photos to detect damage, generate reports, locate nearby repair services and emergency contacts, and provide disaster risk advice.
-                        </p>
-                        
-                        <div class="detail-section">
-                            <div class="detail-title">Tech Stack:</div>
-                            <div class="detail-content">
-                                <ul>
-                                    <li>React Native + Expo, Flask, MySQL, Railway, Cloudinary</li>
-                                </ul>
+                    <div class="right-column">
+                        <div class="project-details">
+                            <p class="project-description">
+                                An AI-powered home assessment app that analyzes uploaded or taken photos to detect damage, generate reports, locate nearby repair services and emergency contacts, and provide disaster risk advice.
+                            </p>
+                            
+                            <div class="detail-section">
+                                <div class="detail-title">Tech Stack:</div>
+                                <div class="detail-content">
+                                    <ul>
+                                        <li>React Native + Expo, Flask, MySQL, Railway, Cloudinary</li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <div class="detail-title">Role:</div>
-                            <div class="detail-content">
-                                Full-Stack Developer (Backend and AI Focus)
+                            
+                            <div class="detail-section">
+                                <div class="detail-title">Role:</div>
+                                <div class="detail-content">
+                                    Full-Stack Developer (Backend and AI Focus)
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <div class="detail-title">Development Insights:</div>
-                            <div class="detail-content">
-                                This project made me have a clear view on how mobile apps are created from start to finish. This also made me use of the recently published spatial understanding by Gemini.
+                            
+                            <div class="detail-section">
+                                <div class="detail-title">Development Insights:</div>
+                                <div class="detail-content">
+                                    This project made me have a clear view on how mobile apps are created from start to finish. This also made me use of the recently published spatial understanding by Gemini.
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Project 4: 9 Mazes of Hell -->
-        <div class="project-container" id="project-4">
-            <div class="project-content">
-                <div class="left-column">
-                    <h2 class="project-title">9 Mazes of Hell</h2>
-                    
-                    <div class="project-media">
-                        <video class="project-video" controls poster="./projects/9-mazes-of-hell-preview.png">
-                            <source src="https://res.cloudinary.com/dqi7yzgm2/video/upload/v1745297569/9_Mazes_of_Hell_Gameplay_y3kxcq.mp4" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
+            <!-- Project 4: 9 Mazes of Hell -->
+            <div class="project-container" id="project-4">
+                <div class="project-content">
+                    <div class="left-column">
+                        <h2 class="project-title">9 Mazes of Hell</h2>
+                        
+                        <div class="project-media">
+                            <video class="project-video" controls poster="./projects/9-mazes-of-hell-preview.png">
+                                <source src="https://res.cloudinary.com/dqi7yzgm2/video/upload/v1745297569/9_Mazes_of_Hell_Gameplay_y3kxcq.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        
+                        <a href="https://github.com/DaRainFlavor/9-Mazes-of-Hell" class="github-link" target="_blank">
+                            View on GitHub
+                        </a>
                     </div>
                     
-                    <a href="https://github.com/DaRainFlavor/9-Mazes-of-Hell" class="github-link" target="_blank">
-                        View on GitHub
-                    </a>
-                </div>
-                
-                <div class="right-column">
-                    <div class="project-details">
-                        <p class="project-description">
-                            A web game where players control Raphael as he navigates the 9 Mazes of Hell to rescue his beloved Constance from the Devil. 
-                        </p>
-                        
-                        <div class="detail-section">
-                            <div class="detail-title">Tech Stack:</div>
-                            <div class="detail-content">
-                                <ul>
-                                    <li>HTML, CSS, JS, Phaser</li>
-                                </ul>
+                    <div class="right-column">
+                        <div class="project-details">
+                            <p class="project-description">
+                                A web game where players control Raphael as he navigates the 9 Mazes of Hell to rescue his beloved Constance from the Devil. 
+                            </p>
+                            
+                            <div class="detail-section">
+                                <div class="detail-title">Tech Stack:</div>
+                                <div class="detail-content">
+                                    <ul>
+                                        <li>HTML, CSS, JS, Phaser</li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <div class="detail-title">Role:</div>
-                            <div class="detail-content">
-                                Game Concept Creator, Music Composer (main menu and game play), Project Lead
+                            
+                            <div class="detail-section">
+                                <div class="detail-title">Role:</div>
+                                <div class="detail-content">
+                                    Game Concept Creator, Music Composer (main menu and game play), Project Lead
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <div class="detail-title">Development Insights:</div>
-                            <div class="detail-content">
-                                This is my first time developing a web game. I've learned how to create maps, how moving sprites work, and the collision detection.
+                            
+                            <div class="detail-section">
+                                <div class="detail-title">Development Insights:</div>
+                                <div class="detail-content">
+                                    This is my first time developing a web game. I've learned how to create maps, how moving sprites work, and the collision detection.
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-    </main>
+        </main>
+    </div>
 
     <script>
         // Project navigation functionality
@@ -616,6 +651,11 @@
         let currentProjectIndex = 0;
 
         function updateProjectVisibility() {
+            document.querySelectorAll('.project-video').forEach(video => {
+                video.pause();
+                video.currentTime = 0;
+            });
+            
             // Hide all projects
             projects.forEach((project, index) => {
                 project.classList.remove('active');

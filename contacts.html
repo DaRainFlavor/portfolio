@@ -93,7 +93,7 @@
             padding: 1rem 0;
             width: 100%;
             margin-bottom: 1rem;
-            margin-top: 18px;
+            margin-top: 40px;
             opacity: 0;
             visibility: hidden;
             transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
@@ -109,6 +109,33 @@
             letter-spacing: 0.1em;
             text-transform: uppercase;
             font-weight: 700;
+        }
+
+        .contact-scroll-container {
+            width: 100%;
+            height: calc(100vh - 150px);
+            overflow-y: auto;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(242, 195, 139, 0.3) rgba(15, 12, 8, 0.5);
+        }
+
+        .contact-scroll-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .contact-scroll-container::-webkit-scrollbar-track {
+            background: rgba(15, 12, 8, 0.8);
+            border-radius: 10px;
+        }
+        
+        .contact-scroll-container::-webkit-scrollbar-thumb {
+            background: rgba(242, 195, 139, 0.8);
+            border-radius: 10px;
+        }
+        
+        .contact-scroll-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(242, 195, 139, 0.6);
         }
 
         .contact-container {
@@ -332,50 +359,52 @@
         <h1>Whispers Across Realms</h1>
     </header>
     
-    <div class="contact-container" id="contactContainer">
-        <div class="contact-description">
-            <p>Send a raven—or, you know, pick your favorite way to reach me. Whether it's a quick message, a shared spell, or a peek into my latest works, I'm just a whisper away.</p>
-        </div>
-        
-        <div class="social-row">
-            <div class="social-item" onclick="window.open('https://facebook.com/AdrianVaflor', '_blank')">
-                <span class="rune-decoration rune-top-left">ᚠ</span>
-                <span class="rune-decoration rune-bottom-right">ᚠ</span>
-                <i class="fab fa-facebook social-icon facebook"></i>
-                <div class="social-name">Facebook</div>
-                <div class="social-username">/AdrianVaflor</div>
+    <div class="contact-scroll-container">
+        <div class="contact-container" id="contactContainer">
+            <div class="contact-description">
+                <p>Send a raven—or, you know, pick your favorite way to reach me. Whether it's a quick message, a shared spell, or a peek into my latest works, I'm just a whisper away.</p>
             </div>
             
-            <div class="social-item" onclick="window.open('https://instagram.com/AdrianVaflor', '_blank')">
-                <span class="rune-decoration rune-top-right">ᚢ</span>
-                <span class="rune-decoration rune-bottom-left">ᚢ</span>
-                <i class="fab fa-instagram social-icon instagram"></i>
-                <div class="social-name">Instagram</div>
-                <div class="social-username">@AdrianVaflor</div>
-            </div>
-            
-            <div class="social-item" onclick="window.open('https://www.linkedin.com/in/AdrianVaflor', '_blank')">
-                <span class="rune-decoration rune-top-left">ᚦ</span>
-                <span class="rune-decoration rune-bottom-right">ᚦ</span>
-                <i class="fab fa-linkedin social-icon linkedin"></i>
-                <div class="social-name">LinkedIn</div>
-                <div class="social-username">/in/AdrianVaflor</div>
-            </div>
-            
-            <div class="social-item" onclick="window.open('https://github.com/DaRainFlavor', '_blank')">
-                <span class="rune-decoration rune-top-right">ᚨ</span>
-                <span class="rune-decoration rune-bottom-left">ᚨ</span>
-                <i class="fab fa-github social-icon github"></i>
-                <div class="social-name">GitHub</div>
-                <div class="social-username">/DaRainFlavor</div>
-            </div>
-            
-            <div class="social-item" onclick="copyEmail('adrianvaflor9@gmail.com')">
-                <span class="rune-decoration rune-top-left">ᚱ</span>
-                <span class="rune-decoration rune-bottom-right">ᚱ</span>
-                <i class="fas fa-envelope social-icon gmail"></i>
-                <div class="social-name">Gmail</div>
-                <div class="social-username">adrianvaflor9@gmail.com</div>
+            <div class="social-row">
+                <div class="social-item" onclick="window.open('https://facebook.com/AdrianVaflor', '_blank')">
+                    <span class="rune-decoration rune-top-left">ᚠ</span>
+                    <span class="rune-decoration rune-bottom-right">ᚠ</span>
+                    <i class="fab fa-facebook social-icon facebook"></i>
+                    <div class="social-name">Facebook</div>
+                    <div class="social-username">/AdrianVaflor</div>
+                </div>
+                
+                <div class="social-item" onclick="window.open('https://instagram.com/AdrianVaflor', '_blank')">
+                    <span class="rune-decoration rune-top-right">ᚢ</span>
+                    <span class="rune-decoration rune-bottom-left">ᚢ</span>
+                    <i class="fab fa-instagram social-icon instagram"></i>
+                    <div class="social-name">Instagram</div>
+                    <div class="social-username">@AdrianVaflor</div>
+                </div>
+                
+                <div class="social-item" onclick="window.open('https://www.linkedin.com/in/AdrianVaflor', '_blank')">
+                    <span class="rune-decoration rune-top-left">ᚦ</span>
+                    <span class="rune-decoration rune-bottom-right">ᚦ</span>
+                    <i class="fab fa-linkedin social-icon linkedin"></i>
+                    <div class="social-name">LinkedIn</div>
+                    <div class="social-username">/in/AdrianVaflor</div>
+                </div>
+                
+                <div class="social-item" onclick="window.open('https://github.com/DaRainFlavor', '_blank')">
+                    <span class="rune-decoration rune-top-right">ᚨ</span>
+                    <span class="rune-decoration rune-bottom-left">ᚨ</span>
+                    <i class="fab fa-github social-icon github"></i>
+                    <div class="social-name">GitHub</div>
+                    <div class="social-username">/DaRainFlavor</div>
+                </div>
+                
+                <div class="social-item" onclick="copyEmail('adrianvaflor9@gmail.com')">
+                    <span class="rune-decoration rune-top-left">ᚱ</span>
+                    <span class="rune-decoration rune-bottom-right">ᚱ</span>
+                    <i class="fas fa-envelope social-icon gmail"></i>
+                    <div class="social-name">Gmail</div>
+                    <div class="social-username">adrianvaflor9@gmail.com</div>
+                </div>
             </div>
         </div>
     </div>
