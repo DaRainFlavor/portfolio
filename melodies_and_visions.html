@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>The Developer's Grimoire - Melodies and Visions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=MedievalSharp&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cinzel Decorative', 'MedievalSharp', cursive, serif;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #f2c38b;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            position: relative;
+            overflow: hidden;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('./pictures/page.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: brightness(0.7);
+            z-index: -2;
+        }
+
+        .stars-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background-color: #f2c38b;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+            opacity: 0;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 0.8; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.3); }
+        }
+
+        /* Preloader styles */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .header {
+            text-align: center;
+            padding: 1rem 0;
+            width: 100%;
+            margin-bottom: 0.5rem;
+            margin-top: 18px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+        }
+
+        .header.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 6vmin, 3rem);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .intro-text {
+            text-align: center;
+            width: 90%;
+            max-width: 800px;
+            margin: 0 auto 1rem;
+            font-size: clamp(0.9rem, 2.5vmin, 1.1rem);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+        }
+
+        .intro-text.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .main-container {
+            display: flex;
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+            height: calc(100vh - 200px);
+            max-height: 600px;
+        }
+
+        .main-container.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: rgba(15, 12, 8, 0.7);
+            border: 1px solid rgba(242, 195, 139, 0.3);
+            border-radius: 5px;
+            padding: 1rem;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .column::before {
+            content: "";
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border: 1px solid rgba(242, 195, 139, 0.1);
+            pointer-events: none;
+            border-radius: 2px;
+        }
+
+        .column-title {
+            font-size: clamp(1.2rem, 4vmin, 1.8rem);
+            margin-bottom: 1rem;
+            text-align: center;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .column-title::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            width: 50%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(242, 195, 139, 0.5), transparent);
+        }
+
+        .column-content {
+            overflow-y: auto;
+            flex-grow: 1;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(242, 195, 139, 0.3) rgba(15, 12, 8, 0.5);
+            padding-right: 5px;
+            margin-right: -5px;
+        }
+
+        .column-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .column-content::-webkit-scrollbar-track {
+            background: rgba(15, 12, 8, 0.5);
+            border-radius: 3px;
+        }
+
+        .column-content::-webkit-scrollbar-thumb {
+            background-color: rgba(242, 195, 139, 0.3);
+            border-radius: 3px;
+        }
+
+        .music-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.8rem;
+            background: rgba(30, 25, 20, 0.6);
+            border: 1px solid rgba(242, 195, 139, 0.2);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .music-item:hover {
+            background: rgba(242, 195, 139, 0.1);
+            border-color: rgba(242, 195, 139, 0.4);
+        }
+
+        .play-button {
+            width: 32px;
+            height: 32px;
+            background: rgba(242, 195, 139, 0.2);
+            border: 1px solid rgba(242, 195, 139, 0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-right: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .play-button:hover {
+            background: rgba(242, 195, 139, 0.3);
+            transform: scale(1.1);
+        }
+
+        .play-icon {
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 7px 0 7px 12px;
+            border-color: transparent transparent transparent #f2c38b;
+            margin-left: 2px;
+        }
+
+        .pause-icon {
+            display: none;
+            width: 12px;
+            height: 14px;
+            position: relative;
+        }
+
+        .pause-icon::before, 
+        .pause-icon::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 14px;
+            background-color: #f2c38b;
+            top: 0;
+        }
+
+        .pause-icon::before {
+            left: 0px;
+        }
+
+        .pause-icon::after {
+            right: 0px;
+        }
+
+        .music-title {
+            font-size: clamp(0.9rem, 2.2vmin, 1.1rem);
+        }
+
+        .art-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .art-card {
+            background: rgba(30, 25, 20, 0.6);
+            border: 1px solid rgba(242, 195, 139, 0.2);
+            border-radius: 3px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+            aspect-ratio: 1/1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .art-card:hover {
+            background: rgba(242, 195, 139, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-color: rgba(242, 195, 139, 0.4);
+        }
+
+        .art-card::before {
+            content: "";
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border: 1px solid rgba(242, 195, 139, 0.1);
+            pointer-events: none;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .art-card:hover::before {
+            border-color: rgba(242, 195, 139, 0.3);
+        }
+
+        .art-title {
+            font-size: clamp(0.8rem, 2vmin, 1rem);
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            z-index: 1;
+            background: rgba(15, 12, 8, 0.7);
+            padding: 0.3rem 0.5rem;
+            border-radius: 3px;
+        }
+
+        .art-image {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            top: 0;
+            left: 0;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .art-card:hover .art-image {
+            opacity: 0.9;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            color: #f2c38b;
+        }
+
+        .close-modal {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #f2c38b;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+        }
+
+        .modal-title {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 1.5rem;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            z-index: 1001;
+        }
+
+        .modal-description {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            z-index: 1001;
+            max-width: 80%;
+        }
+
+        .artwork-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .home-link {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+
+        .home-link.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .nav-icon {
+            width: 32px;
+            height: 32px;
+            filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.5));
+        }
+
+        .nav-link:hover {
+            transform: scale(1.1);
+        }
+
+        .audio-player {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .audio-player::-webkit-media-controls-panel {
+            background-color: rgba(30, 25, 20, 0.8);
+            border-radius: 0;
+        }
+
+        .audio-player::-webkit-media-controls-play-button,
+        .audio-player::-webkit-media-controls-mute-button {
+            filter: sepia(100%) saturate(300%) hue-rotate(10deg) brightness(0.8);
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(242, 195, 139, 0.2);
+            margin-top: 0.5rem;
+            cursor: pointer;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #f2c38b;
+            width: 0%;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                height: auto;
+                max-height: none;
+                gap: 1rem;
+            }
+            
+            .column {
+                height: auto;
+                max-height: 500px;
+            }
+            
+            .art-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .modal-title {
+                font-size: 1.2rem;
+                top: 10px;
+                left: 10px;
+            }
+
+            .modal-description {
+                font-size: 0.9rem;
+                bottom: 10px;
+                left: 10px;
+            }
+
+            .close-modal {
+                top: 10px;
+                right: 10px;
+                font-size: 1.5rem;
+                width: 30px;
+                height: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .art-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-title {
+                font-size: 1rem;
+            }
+
+            .modal-description {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader" id="preloader"></div>
+
+    <a href="contents.html" class="home-link nav-link" id="homeLink">
+        <img src="./icons/home.png" alt="Home" class="nav-icon">
+    </a>
+
+    <div class="stars-container" id="starsContainer"></div>
+    
+    <header class="header" id="header">
+        <h1>Melodies and Visions</h1>
+    </header>
+
+    <div class="intro-text" id="introText">
+        Aside from pure coding, I also have interest in creating music and art and some of them blend in and are used to my developed programs.
+    </div>
+    
+    <div class="main-container" id="mainContainer">
+        <!-- Music Column -->
+        <div class="column">
+            <h2 class="column-title">Music Compositions</h2>
+            <div class="column-content">
+                <div class="music-item" data-src="./music/Adrian Vaflor - The Astral.m4a">
+                    <div class="play-button">
+                        <div class="play-icon"></div>
+                        <div class="pause-icon"></div>
+                    </div>
+                    <div class="music-title">The Astral</div>
+                    <audio class="audio-element" preload="none"></audio>
+                </div>
+                
+                <div class="music-item" data-src="./music/Adrian Vaflor - 9 Mazes of Hell (Intro and Main Menu).m4a">
+                    <div class="play-button">
+                        <div class="play-icon"></div>
+                        <div class="pause-icon"></div>
+                    </div>
+                    <div class="music-title">9 Mazes of Hell (Intro & Main Menu)</div>
+                    <audio class="audio-element" preload="none"></audio>
+                </div>
+                
+                <div class="music-item" data-src="./music/Adrian Vaflor - 9 Mazes of Hell (Game Loop).m4a">
+                    <div class="play-button">
+                        <div class="play-icon"></div>
+                        <div class="pause-icon"></div>
+                    </div>
+                    <div class="music-title">9 Mazes of Hell (Game Loop)</div>
+                    <audio class="audio-element" preload="none"></audio>
+                </div>
+                
+                <div class="music-item" data-src="./music/Adrian Vaflor - Long Live Majamaraja.m4a">
+                    <div class="play-button">
+                        <div class="play-icon"></div>
+                        <div class="pause-icon"></div>
+                    </div>
+                    <div class="music-title">Long Live, Majamaraja!</div>
+                    <audio class="audio-element" preload="none"></audio>
+                </div>
+                
+                <div class="music-item" data-src="./music/Adrian Vaflor - Failure Sonata.m4a">
+                    <div class="play-button">
+                        <div class="play-icon"></div>
+                        <div class="pause-icon"></div>
+                    </div>
+                    <div class="music-title">Failure Sonata</div>
+                    <audio class="audio-element" preload="none"></audio>
+                </div>
+                
+                <div class="music-item" data-src="./music/Adrian Vaflor - Color Grid.m4a">
+                    <div class="play-button">
+                        <div class="play-icon"></div>
+                        <div class="pause-icon"></div>
+                    </div>
+                    <div class="music-title">Color Grid</div>
+                    <audio class="audio-element" preload="none"></audio>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Art Column -->
+        <div class="column">
+            <h2 class="column-title">Artworks</h2>
+            <div class="column-content">
+                <div class="art-grid">
+                    <div class="art-card" data-img="./artworks/Light Up the Philippines.jpg">
+                        <img src="artworks/Light Up The Philippines.jpg" alt="Light Up The Philippines" class="art-image">
+                        <div class="art-title">Light Up The Philippines</div>
+                    </div>
+                    
+                    <div class="art-card" data-img="./artworks/Adam and Eve.jpg">
+                        <img src="artworks/Adam and Eve.jpg" alt="Adam and Eve" class="art-image">
+                        <div class="art-title">Adam and Eve</div>
+                    </div>
+                    
+                    <div class="art-card" data-img="./artworks/Modulo Art.png">
+                        <img src="./artworks/Modulo Art.png" alt="Modulo Art" class="art-image">
+                        <div class="art-title">Modulo Art</div>
+                    </div>
+                     <!-- <div class="art-card" data-title="Color Rush Logo" data-desc="Digital Art" data-img="./artworks/Color Rush Logo.png">  -->
+                    <div class="art-card" data-img="./artworks/Color Rush Logo.png">
+                        <img src="./artworks/Color Rush Logo.png" alt="Color Rush Logo" class="art-image">
+                        <div class="art-title">Color Rush Logo</div>
+                    </div>
+
+                    <div class="art-card" data-img="./artworks/Beeznet Logo.jpg">
+                        <img src="./artworks/Beeznet Logo.jpg" alt="Beeznet Logo" class="art-image">
+                        <div class="art-title">Beeznet Logo</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div class="modal" id="artModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <h3 class="modal-title" id="modalTitle"></h3>
+            <p class="modal-description" id="modalDescription"></p>
+            <img src="" alt="" class="artwork-image" id="modalArtwork">
+        </div>
+    </div>
+
+    <script>
+        // Preload images
+        const imagesToPreload = [
+            './pictures/page.png',
+            './icons/home.png',
+            './artworks/Light Up The Philippines.jpg',
+            './artworks/Adam and Eve.jpg',
+            './artworks/Modulo Art.png',
+            './artworks/Color Rush Logo.png',
+            './artworks/Beeznet Logo.jpg'
+        ];
+        
+        let imagesLoaded = 0;
+        const totalImages = imagesToPreload.length;
+        
+        function preloadImages() {
+            for (let i = 0; i < totalImages; i++) {
+                const img = new Image();
+                img.src = imagesToPreload[i];
+                img.onload = imageLoaded;
+                img.onerror = imageLoaded;
+            }
+        }
+        
+        function imageLoaded() {
+            imagesLoaded++;
+            if (imagesLoaded >= totalImages) {
+                setTimeout(() => {
+                    document.getElementById('preloader').classList.add('hidden');
+                    document.getElementById('header').classList.add('visible');
+                    document.getElementById('introText').classList.add('visible');
+                    document.getElementById('mainContainer').classList.add('visible');
+                    document.getElementById('homeLink').classList.add('visible');
+                    createStars();
+                }, 500);
+            }
+        }
+        
+        function createStars() {
+            const starsContainer = document.getElementById('starsContainer');
+            
+            for (let i = 0; i < 150; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                const size = Math.random() * 3 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                star.style.animationDelay = `${Math.random() * 3}s`;
+                star.style.animationDuration = `${Math.random() * 2 + 2}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        const modal = document.getElementById('artModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDescription = document.getElementById('modalDescription');
+        const modalArtwork = document.getElementById('modalArtwork');
+        const closeModal = document.getElementById('closeModal');
+        
+
+        document.querySelectorAll('.art-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const title = this.getAttribute('data-title');
+                const desc = this.getAttribute('data-desc');
+                const imgSrc = this.getAttribute('data-img');
+                
+                modalTitle.textContent = title;
+                modalDescription.textContent = desc;
+                modalArtwork.src = imgSrc;
+                modalArtwork.alt = title;
+                
+                modal.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+        
+        closeModal.addEventListener('click', function() {
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+        });
+        
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+        });
+        
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.classList.contains('show')) {
+                modal.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+        });
+        
+        let currentlyPlaying = null;
+        let currentAudio = null;
+        
+        document.querySelectorAll('.music-item').forEach(item => {
+            const playButton = item.querySelector('.play-button');
+            const playIcon = item.querySelector('.play-icon');
+            const pauseIcon = item.querySelector('.pause-icon');
+            const audioElement = item.querySelector('.audio-element');
+            const musicSrc = item.getAttribute('data-src');
+            
+            audioElement.src = musicSrc;
+            
+            playButton.addEventListener('click', function() {
+                const musicTitle = item.getAttribute('data-title');
+                
+                if (currentlyPlaying === item) {
+                    audioElement.pause();
+                    playIcon.style.display = 'block';
+                    pauseIcon.style.display = 'none';
+                    currentlyPlaying = null;
+                    currentAudio = null;
+                } 
+                else {
+                    if (currentlyPlaying) {
+                        const currentAudioElement = currentlyPlaying.querySelector('.audio-element');
+                        const currentPlayIcon = currentlyPlaying.querySelector('.play-icon');
+                        const currentPauseIcon = currentlyPlaying.querySelector('.pause-icon');
+                        
+                        currentAudioElement.pause();
+                        currentAudioElement.currentTime = 0;
+                        currentPlayIcon.style.display = 'block';
+                        currentPauseIcon.style.display = 'none';
+                    }
+                    
+                    audioElement.play();
+                    playIcon.style.display = 'none';
+                    pauseIcon.style.display = 'block';
+                    currentlyPlaying = item;
+                    currentAudio = audioElement;
+                }
+            });
+            
+            audioElement.addEventListener('ended', function() {
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+                currentlyPlaying = null;
+                currentAudio = null;
+            });
+        });
+        
+        modal.addEventListener('click', function() {
+            if (currentAudio) {
+                currentAudio.pause();
+                if (currentlyPlaying) {
+                    const playIcon = currentlyPlaying.querySelector('.play-icon');
+                    const pauseIcon = currentlyPlaying.querySelector('.pause-icon');
+                    playIcon.style.display = 'block';
+                    pauseIcon.style.display = 'none';
+                }
+                currentlyPlaying = null;
+                currentAudio = null;
+            }
+        });
+        
+        // Start preloading images when the page loads
+        window.addEventListener('load', preloadImages);
+    </script>
+</body>
+</html>

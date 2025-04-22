@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>The Developer's Grimoire - Arcane Tools</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=MedievalSharp&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            height: 100%;
+            overflow-y: scroll;
+            scrollbar-width: thin;
+            scrollbar-color: #f2c38b rgba(15, 12, 8, 0.8);
+        }
+
+        body {
+            font-family: 'Cinzel Decorative', 'MedievalSharp', cursive, serif;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #f2c38b;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            position: relative;
+            overflow-x: hidden;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            width: 100%;
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 12, 8, 0.3);
+            border-left: 1px solid rgba(242, 195, 139, 0.2);
+            margin: 5px 0;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: rgba(242, 195, 139, 0.7);
+            border-radius: 6px;
+            border: 3px solid rgba(15, 12, 8, 0.5);
+            box-shadow: inset 0 0 6px rgba(242, 195, 139, 0.3);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(242, 195, 139, 0.9);
+        }
+
+        .background-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('./pictures/page.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: brightness(0.7);
+        }
+
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background-color: #f2c38b;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+            opacity: 0;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 0.8; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.3); }
+        }
+
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            padding: 1rem 0;
+            width: 100%;
+            margin-bottom: 1rem;
+            margin-top: 18px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+        }
+
+        .header.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 6vmin, 3rem);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .intro-text {
+            text-align: center;
+            width: 90%;
+            max-width: 800px;
+            margin: 0 auto 2rem auto;
+            font-size: clamp(1rem, 2.5vmin, 1.2rem);
+            line-height: 1.6;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+        }
+
+        .intro-text.visible {
+            opacity: 1;
+            margin-top: -10px;
+            visibility: visible;
+        }
+
+        .tech-stack-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            margin-top: -30px;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+        }
+
+        .tech-stack-container.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .stack-category {
+            background: rgba(15, 12, 8, 0.7);
+            border: 1px solid rgba(242, 195, 139, 0.3);
+            border-radius: 5px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .stack-category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            border-color: rgba(242, 195, 139, 0.6);
+        }
+
+        .category-title {
+            font-size: clamp(1.3rem, 3vmin, 1.8rem);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(242, 195, 139, 0.3);
+            color: #f2c38b;
+            letter-spacing: 0.05em;
+        }
+
+        .skill-list {
+            list-style-type: none;
+        }
+
+        .skill-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            background: rgba(15, 12, 8, 0.5);
+            border: 1px solid rgba(242, 195, 139, 0.2);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .skill-item img[src*="flask.svg"],
+        .skill-item img[src*="railway.svg"] {
+            background-color: white;
+            border-radius: 50%;
+            padding: 3px;
+        }
+
+        .skill-item:hover {
+            background: rgba(242, 195, 139, 0.1);
+            border-color: rgba(242, 195, 139, 0.4);
+            transform: translateX(5px);
+        }
+
+        .skill-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.5));
+        }
+
+        .skill-name {
+            font-size: clamp(0.9rem, 2.5vmin, 1.1rem);
+            letter-spacing: 0.03em;
+        }
+
+        .skill-link {
+            text-decoration: none;
+            color: #f2c38b;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .skill-link:hover .skill-name {
+            text-decoration: underline;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .home-link {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+
+        .home-link.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .home-icon {
+            width: 32px;
+            height: 32px;
+            filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.5));
+        }
+
+        .home-link:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .tech-stack-container {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tech-stack-container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .skill-icon {
+                width: 20px;
+                height: 20px;
+            }
+            
+            ::-webkit-scrollbar {
+                width: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-wrapper">
+        <div class="background-image"></div>
+    </div>
+
+    <div class="preloader" id="preloader"></div>
+
+    <div class="stars-container" id="starsContainer"></div>
+
+    <div class="content-wrapper">
+        <a href="contents.html" class="home-link" id="homeLink">
+            <img src="./icons/home.png" alt="Home" class="home-icon">
+        </a>
+        
+        <header class="header" id="header">
+            <h1>Arcane Tools</h1>
+        </header>
+        
+        <div class="intro-text" id="introText">
+            Throughout my CS Journey, the following are the tech stack I had practical applications with.
+        </div>
+        
+        <div class="tech-stack-container" id="techStackContainer">
+            <!-- Languages & Core Tech category -->
+            <div class="stack-category">
+                <h2 class="category-title">Languages & Core Tech</h2>
+                <ul class="skill-list">
+                    <li class="skill-item">
+                        <a href="https://www.python.org/" target="_blank" rel="noopener noreferrer" class="skill-link">
+                            <img src="./icons/python.png" alt="Python Icon" class="skill-icon">
+                            <span class="skill-name">Python</span>
+                        </a>
+                    </li>
+                    <li class="skill-item">
+                        <a href="https://en.cppreference.com/w/c/language" target="_blank" rel="noopener noreferrer" class="skill-link">
+                            <img src="./icons/c.png" alt="C Icon" class="skill-icon">
+                            <span class="skill-name">C</span>
+                        </a>
+                    </li>
+                    <li class="skill-item">
+                        <a href="https://isocpp.org/" target="_blank" rel="noopener noreferrer" class="skill-link">
+                            <img src="./icons/cplusplus.png" alt="C++ Icon" class="skill-icon">
+                            <span class="skill-name">C++</span>
+                        </a>
+                    </li>
+                    <li class="skill-item">
+                        <a href="https://www.mysql.com/" target="_blank" rel="noopener noreferrer" class="skill-link">
+                            <img src="./icons/mySQL.png" alt="MySQL Icon" class="skill-icon">
+                            <span class="skill-name">MySQL</span>
+                        </a>
+                    </li>
+                    <li class="skill-item">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noopener noreferrer" class="skill-link">
+                            <img src="./icons/js.png" alt="JavaScript Icon" class="skill-icon">
+                            <span class="skill-name">JavaScript</span>
+                        </a>
+                    </li>
+                    <li class="skill-item">
+                        <a href="https://www.cs.unibo.it/~solmi/teaching/arch_2002-2003/AssemblyLanguageProgDoc.pdf" target="_blank" rel="noopener noreferrer" class="skill-link">
+                            <span class="skill-name">MIPS</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!--Frontend & Design category -->
+            <div class="stack-category">
+                <h2 class="category-title">Frontend & Design</h2>
+                <ul class="skill-list">
+                    <li class="skill-item">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank" rel="noopener noreferrer" class="skill-link">
+                            <img src="./icons/html.png" alt="HTML Icon" class="skill-icon">
+                            <span class="skill-name">HTML</span>
+                        </a>
+                    </li>
+                    <li class="skill-item">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank" rel="noopener noreferrer" class="skill-link">
+                            <img src="./icons/css.png" alt="CSS Icon" class="skill-icon">
+                            <span class="skill-name">CSS</span>
+                        </a>
+                    </li>
+                    <li class="skill-item">
+                        <a href="https://reactnative.dev/" target="_blank" rel="noopener noreferrer" class="skill-link">
+                            <img src="./icons/react-native.png" alt="React Native Icon" class="skill-icon">
+                            <span class="skill-name">React Native (with Expo)</span>
+                        </a>
+                    </li>
+                    <li class="skill-item">
+                        <a href="https://www.canva.com/" target="_blank" rel="noopener noreferrer" class="skill-link">
+                            <img src="./icons/canva.png" alt="Canva Icon" class="skill-icon">
+                            <span class="skill-name">Canva</span>
+                        </a>
+                    </li>
+                    <li class="skill-item">
+                        <a href="https://www.figma.com/" target="_blank" rel="noopener noreferrer" class="skill-link">
+                            <img src="./icons/figma.png" alt="Figma Icon" class="skill-icon">
+                            <span class="skill-name">Figma</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Backend, Tools & Hosting category -->
+            <div class="stack-category">
+                <h2 class="category-title">Backend, Tools & Hosting</h2>
+                <ul class="skill-list">
+                    <li class="skill-item">
+                        <a href="https://flask.palletsprojects.com/" target="_blank" rel="noopener noreferrer" class="skill-link">
+                            <img src="./icons/flask.svg" alt="Flask Icon" class="skill-icon">
+                            <span class="skill-name">Flask</span>
+                        </a>
+                    </li>
+                    <li class="skill-item">
+                        <a href="https://railway.app/" target="_blank" rel="noopener noreferrer" class="skill-link">
+                            <img src="./icons/railway.svg" alt="Railway Icon" class="skill-icon">
+                            <span class="skill-name">Railway</span>
+                        </a>
+                    </li>
+                    <li class="skill-item">
+                        <a href="https://cloudinary.com/" target="_blank" rel="noopener noreferrer" class="skill-link">
+                            <img src="./icons/cloudinary.svg" alt="Cloudinary Icon" class="skill-icon">
+                            <span class="skill-name">Cloudinary</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Other Tech & Creative Tools category -->
+            <div class="stack-category">
+                <h2 class="category-title">Other Tech & Creative Tools</h2>
+                <ul class="skill-list">
+                    <li class="skill-item">
+                        <a href="https://www.sfml-dev.org/" target="_blank" rel="noopener noreferrer" class="skill-link">
+                            <img src="./icons/sfml.png" alt="SFML Icon" class="skill-icon">
+                            <span class="skill-name">SFML</span>
+                        </a>
+                    </li>
+                    <li class="skill-item">
+                        <a href="https://phaser.io/" target="_blank" rel="noopener noreferrer" class="skill-link">
+                            <img src="./icons/phaser.svg" alt="Phaser Icon" class="skill-icon">
+                            <span class="skill-name">Phaser</span>
+                        </a>
+                    </li>
+                    <li class="skill-item">
+                        <a href="https://www.bandlab.com/" target="_blank" rel="noopener noreferrer" class="skill-link">
+                            <img src="./icons/bandlab.png" alt="Bandlab Icon" class="skill-icon">
+                            <span class="skill-name">Bandlab</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function getScrollbarWidth() {
+            const outer = document.createElement('div');
+            outer.style.visibility = 'hidden';
+            outer.style.overflow = 'scroll';
+            document.body.appendChild(outer);
+            
+            const inner = document.createElement('div');
+            outer.appendChild(inner);
+            
+            const scrollbarWidth = outer.offsetWidth - inner.offsetWidth;
+            
+            outer.parentNode.removeChild(outer);
+            
+            return scrollbarWidth;
+        }
+        
+        document.documentElement.style.setProperty('--scrollbar-width', getScrollbarWidth() + 'px');
+        
+        // Preload images
+        const imagesToPreload = [
+            './pictures/page.png',
+            './icons/home.png',
+
+            './icons/python.png',
+            './icons/c.png',
+            './icons/cplusplus.png',
+            './icons/mySQL.png',
+            './icons/js.png',
+
+            './icons/html.png',
+            './icons/css.png',
+            './icons/react-native.png',
+            './icons/canva.png',
+            './icons/figma.png',
+            
+            './icons/flask.svg',
+            './icons/railway.svg',
+            './icons/cloudinary.svg',
+
+            './icons/sfml.png',
+            './icons/phaser.svg',
+            './icons/bandlab.png',
+        ];
+        
+        let imagesLoaded = 0;
+        const totalImages = imagesToPreload.length;
+        
+        function preloadImages() {
+            for (let i = 0; i < totalImages; i++) {
+                const img = new Image();
+                img.src = imagesToPreload[i];
+                img.onload = imageLoaded;
+                img.onerror = imageLoaded;
+            }
+        }
+        
+        function imageLoaded() {
+            imagesLoaded++;
+            if (imagesLoaded >= totalImages) {
+                setTimeout(() => {
+                    document.getElementById('preloader').classList.add('hidden');
+                    document.getElementById('header').classList.add('visible');
+                    document.getElementById('introText').classList.add('visible');
+                    document.getElementById('techStackContainer').classList.add('visible');
+                    document.getElementById('homeLink').classList.add('visible');
+                    createStars();
+                }, 500);
+            }
+        }
+        
+        function createStars() {
+            const starsContainer = document.getElementById('starsContainer');
+            
+            for (let i = 0; i < 150; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                const size = Math.random() * 3 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                star.style.animationDelay = `${Math.random() * 3}s`;
+                star.style.animationDuration = `${Math.random() * 2 + 2}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // Start preloading images when the page loads
+        window.addEventListener('load', preloadImages);
+    </script>
+</body>
+</html>

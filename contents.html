@@ -33,7 +33,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('base.png');
+            background-image: url('./pictures/page.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -65,12 +65,45 @@
             100% { opacity: 0; transform: scale(0.3); }
         }
 
+        /* Preloader styles */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         .header {
             text-align: center;
             padding: 1rem 0;
             width: 100%;
             margin-bottom: 1rem;
             margin-top: 18px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+        }
+
+        .header.visible {
+            opacity: 1;
+            visibility: visible;
         }
 
         h1 {
@@ -90,6 +123,14 @@
             margin: 0 auto;
             margin-top: -30px;
             list-style-type: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+        }
+
+        .contents-list.visible {
+            opacity: 1;
+            visibility: visible;
         }
 
         .owner-row {
@@ -195,6 +236,14 @@
             right: 20px;
             z-index: 100;
             transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+
+        .home-link.visible {
+            opacity: 1;
+            visibility: visible;
         }
 
         .home-icon {
@@ -209,76 +258,144 @@
     </style>
 </head>
 <body>
-    <a href="index.html" class="home-link">
-        <img src="home.png" alt="Home" class="home-icon">
+    <!-- Preloader -->
+    <div class="preloader" id="preloader"></div>
+
+    <a href="index.html" class="home-link" id="homeLink">
+        <img src="./icons/home.png" alt="Home" class="home-icon">
     </a>
 
     <div class="stars-container" id="starsContainer"></div>
     
-    <header class="header">
+    <header class="header" id="header">
         <h1>Table of Contents</h1>
     </header>
     
-    <ul class="contents-list">
+    <ul class="contents-list" id="contentsList">
         <li class="owner-row">
             <div class="content-item">
-                <img src="owner.png" alt="Owner Icon" class="content-icon">
+                <img src="./icons/owner.png" alt="Owner Icon" class="content-icon">
                 <div class="content-text">About the Owner</div>
             </div>
         </li>
         
         <li class="main-grid">
             <div class="content-item"><em></em>
-                <img src="project.png" alt="Projects Icon" class="content-icon">
+                <img src="./icons/project.png" alt="Projects Icon" class="content-icon">
                 <div class="content-text">Tomes of Creation<br>(Projects)</div>
             </div>
             <div class="content-item">
-                <img src="musicArt.png" alt="Creative Icon" class="content-icon">
+                <img src="./icons/musicArt.png" alt="Creative Icon" class="content-icon">
                 <div class="content-text">Melodies and Visions<br>(Creative Section)</div>
             </div>
             <div class="content-item">
-                <img src="tools.png" alt="Tech Stack Icon" class="content-icon">
+                <img src="./icons/tools.png" alt="Tech Stack Icon" class="content-icon">
                 <div class="content-text">Arcane Tools<br>(Tech Stack)</div>
             </div>
             <div class="content-item">
-                <img src="certificate.png" alt="Certificates Icon" class="content-icon">
+                <img src="./icons/certificate.png" alt="Certificates Icon" class="content-icon">
                 <div class="content-text">Seals & Honors<br>(Certificates)</div>
             </div>
             <div class="content-item">
-                <img src="heart.png" alt="Soft Skills Icon" class="content-icon">
+                <img src="./icons/heart.png" alt="Soft Skills Icon" class="content-icon">
                 <div class="content-text">The Inner Light<br>(Soft Skills)</div>
             </div>
             <div class="content-item">
-                <img src="contact.png" alt="Contact Icon" class="content-icon">
+                <img src="./icons/contact.png" alt="Contact Icon" class="content-icon">
                 <div class="content-text">Whispers Across Realms<br>(Contact/Socials)</div>
             </div>
         </li>
     </ul>
 
     <script>
-        const starsContainer = document.getElementById('starsContainer');
+        // Preload images
+        const imagesToPreload = [
+            './pictures/page.png',
+            './icons/home.png',
+            './icons/owner.png',
+            './icons/project.png',
+            './icons/musicArt.png',
+            './icons/tools.png',
+            './icons/certificate.png',
+            './icons/heart.png',
+            './icons/contact.png'
+        ];
         
-        for (let i = 0; i < 150; i++) {
-            const star = document.createElement('div');
-            star.classList.add('star');
-            
-            star.style.left = `${Math.random() * 100}%`;
-            star.style.top = `${Math.random() * 100}%`;
-            
-            const size = Math.random() * 3 + 1;
-            star.style.width = `${size}px`;
-            star.style.height = `${size}px`;
-            
-            star.style.animationDelay = `${Math.random() * 3}s`;
-            star.style.animationDuration = `${Math.random() * 2 + 2}s`;
-            
-            starsContainer.appendChild(star);
+        let imagesLoaded = 0;
+        const totalImages = imagesToPreload.length;
+        
+        function preloadImages() {
+            for (let i = 0; i < totalImages; i++) {
+                const img = new Image();
+                img.src = imagesToPreload[i];
+                img.onload = imageLoaded;
+                img.onerror = imageLoaded;
+            }
         }
+        
+        function imageLoaded() {
+            imagesLoaded++;
+            if (imagesLoaded >= totalImages) {
+                setTimeout(() => {
+                    document.getElementById('preloader').classList.add('hidden');
+                    document.getElementById('header').classList.add('visible');
+                    document.getElementById('contentsList').classList.add('visible');
+                    document.getElementById('homeLink').classList.add('visible');
+                    createStars();
+                }, 500);
+            }
+        }
+        
+        function createStars() {
+            const starsContainer = document.getElementById('starsContainer');
+            
+            for (let i = 0; i < 150; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                const size = Math.random() * 3 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                star.style.animationDelay = `${Math.random() * 3}s`;
+                star.style.animationDuration = `${Math.random() * 2 + 2}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // Start preloading images when the page loads
+        window.addEventListener('load', preloadImages);
         
         document.querySelectorAll('.content-item').forEach(item => {
             item.addEventListener('click', function() {
                 const contentText = this.querySelector('.content-text').textContent;
-                alert(`Navigating to: ${contentText}`);
+                if (contentText.includes("About the Owner")) {
+                    window.location.href = "about_the_owner.html";
+                } else if (contentText.includes("Tomes of Creation")) {
+                    window.location.href = "tomes_of_creation.html";
+                }
+                else if (contentText.includes("Melodies and Visions")) {
+                    window.location.href = "melodies_and_visions.html";
+                }
+                else if (contentText.includes("Soft Skills")) {
+                    window.location.href = "soft_skills.html";
+                }
+                else if (contentText.includes("Seals & Honors")) {
+                    window.location.href = "certificates.html";
+                }
+                else if (contentText.includes("Whispers Across Realms")) {
+                    window.location.href = "contacts.html";
+                }
+                else if (contentText.includes("Arcane Tools")) {
+                    window.location.href = "tech_stack.html";
+                }
+                else {
+                    alert(`Navigating to: ${contentText}`);
+                }
             });
         });
     </script>

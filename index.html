@@ -35,7 +35,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('background.jpg');
+            background-image: url('./pictures/background.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -75,6 +75,14 @@
             position: relative;
             animation: fadeIn 2s ease-in-out;
             z-index: 2;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+        }
+
+        .content.visible {
+            opacity: 1;
+            visibility: visible;
         }
 
         .logo {
@@ -101,10 +109,17 @@
             font-size: clamp(1rem, 4vmin, 1.8rem);
             margin-bottom: 5vmin;
             font-weight: 400;
-            font-style: italic;
+            font-family: Garamond, serif;
         }
 
-        .start-btn {
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .btn {
             background: transparent;
             border: 2px solid #f2c38b;
             color: #f2c38b;
@@ -120,13 +135,13 @@
             overflow: hidden;
         }
 
-        .start-btn:hover {
+        .btn:hover {
             background: rgba(242, 195, 139, 0.2);
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
-        .start-btn::before {
+        .btn::before {
             content: "";
             position: absolute;
             top: 0;
@@ -137,17 +152,68 @@
             transition: 0.5s;
         }
 
-        .start-btn:hover::before {
+        .btn:hover::before {
             left: 100%;
         }
+        
+        .start-btn {
+            background: rgba(242, 195, 139, 0.2);
+            border-width: 3px;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .cv-btn {
+            background: transparent;
+            border-width: 0px;
+            font-size: clamp(0.9rem, 3.5vmin, 1.1rem);
+            padding: clamp(0.6rem, 2.5vw, 0.8rem) clamp(1.5rem, 8vw, 2.5rem);
+            opacity: 0.8;
+            letter-spacing: 0.05em;
+        }
 
-        /* Animations */
+        .cv-btn:hover {
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(242, 195, 139, 0.3);
+            border-radius: 50%;
+            border-top-color: #f2c38b;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Orientation adjustments */
         @media (orientation: portrait) {
             .content {
                 padding: 10vmin 5vmin;
@@ -168,7 +234,6 @@
             }
         }
 
-        /* Very small devices */
         @media (max-width: 360px) {
             .logo {
                 width: 60px;
@@ -180,41 +245,83 @@
                 letter-spacing: 0.05em;
             }
             
-            .start-btn {
+            .btn {
                 padding: 0.8rem 1.5rem;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="loader"></div>
+    </div>
+
     <div class="stars-container" id="starsContainer"></div>
     
-    <div class="content">
-        <img src="computer.png" alt="Developer's Grimoire Logo" class="logo">
+    <div class="content" id="content">
+        <img src="./icons/computer.png" alt="Developer's Grimoire Logo" class="logo">
         <h1>The Developer's Grimoire</h1>
         <h2>CS Portfolio by Adrian Vaflor</h2>
-        <button class="start-btn" id="startButton">Start</button>
+        <div class="buttons-container">
+            <button class="btn start-btn" id="startButton">Start</button>
+            <a href="./documents/Adrian_Vaflor_CV.pdf" download class="btn cv-btn">Download CV</a>
+        </div>
     </div>
 
     <script>
-        const starsContainer = document.getElementById('starsContainer');
+        // Preload images
+        const imagesToPreload = [
+            './pictures/background.jpg',
+            './icons/computer.png'
+        ];
         
-        for (let i = 0; i < 150; i++) {
-            const star = document.createElement('div');
-            star.classList.add('star');
-            
-            star.style.left = `${Math.random() * 100}%`;
-            star.style.top = `${Math.random() * 100}%`;
-            
-            const size = Math.random() * 3 + 1;
-            star.style.width = `${size}px`;
-            star.style.height = `${size}px`;
-            
-            star.style.animationDelay = `${Math.random() * 3}s`;
-            star.style.animationDuration = `${Math.random() * 2 + 2}s`;
-            
-            starsContainer.appendChild(star);
+        let imagesLoaded = 0;
+        const totalImages = imagesToPreload.length;
+        
+        function preloadImages() {
+            for (let i = 0; i < totalImages; i++) {
+                const img = new Image();
+                img.src = imagesToPreload[i];
+                img.onload = imageLoaded;
+                img.onerror = imageLoaded;
+            }
         }
+        
+        function imageLoaded() {
+            imagesLoaded++;
+            if (imagesLoaded >= totalImages) {
+                setTimeout(() => {
+                    document.getElementById('preloader').classList.add('hidden');
+                    document.getElementById('content').classList.add('visible');
+                    createStars();
+                }, 500);
+            }
+        }
+        
+        function createStars() {
+            const starsContainer = document.getElementById('starsContainer');
+            
+            for (let i = 0; i < 150; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                const size = Math.random() * 3 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                star.style.animationDelay = `${Math.random() * 3}s`;
+                star.style.animationDuration = `${Math.random() * 2 + 2}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // Start preloading images when the page loads
+        window.addEventListener('load', preloadImages);
         
         document.getElementById('startButton').addEventListener('click', function() {
             window.location.href = 'quote.html';

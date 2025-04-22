@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>The Developer's Grimoire - About the Owner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=MedievalSharp&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cinzel Decorative', 'MedievalSharp', cursive, serif;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #f2c38b;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            position: relative;
+            overflow: hidden;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('./pictures/page.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: brightness(0.7);
+            z-index: -2;
+        }
+
+        .stars-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background-color: #f2c38b;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+            opacity: 0;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 0.8; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.3); }
+        }
+
+        /* Preloader styles */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .header {
+            text-align: center;
+            padding: 1rem 0;
+            width: 100%;
+            margin-bottom: 1rem;
+            margin-top: 18px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+        }
+
+        .header.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 6vmin, 3rem);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 800px;
+            width: 90%;
+            margin: 0 auto;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+            max-height: 70vh; /* Set maximum height */
+            overflow-y: auto; /* Enable vertical scrolling */
+            scrollbar-width: thin; /* For Firefox */
+            scrollbar-color: rgba(242, 195, 139, 0.3) rgba(15, 12, 8, 0.5);
+        }
+
+        .chat-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .chat-container::-webkit-scrollbar-track {
+            background: rgba(15, 12, 8, 0.8);
+            border-radius: 10px;
+        }
+        
+        .chat-container::-webkit-scrollbar-thumb {
+            background: rgba(242, 195, 139, 0.8);
+            border-radius: 10px;
+        }
+        
+        .chat-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(242, 195, 139, 0.6);
+        }
+
+        .chat-container.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .profile-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(242, 195, 139, 0.5);
+            box-shadow: 0 0 10px rgba(242, 195, 139, 0.3);
+            margin-right: 10px;
+        }
+
+        .chat-message {
+            display: flex;
+            margin-bottom: 1.5rem;
+            width: 100%;
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .message-content {
+            max-width: 80%;
+            padding: 0.8rem 1.2rem;
+            border-radius: 18px;
+            position: relative;
+            font-size: clamp(1rem, 3vmin, 1.1rem);
+            line-height: 1.4;
+        }
+
+        .received {
+            align-self: flex-start;
+        }
+
+        .received .message-content {
+            background: rgba(15, 12, 8, 0.7);
+            border: 1px solid rgba(242, 195, 139, 0.2);
+            border-top-left-radius: 5px;
+            color: #f2c38b;
+        }
+
+        .sent {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .sent .message-content {
+            background: rgba(60, 45, 25, 0.7);
+            border: 1px solid rgba(242, 195, 139, 0.3);
+            border-bottom-right-radius: 5px;
+            color: #f8d7a3;
+        }
+
+        .message-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .sender-name {
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #f8d7a3;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            color: rgba(242, 195, 139, 0.6);
+            margin-left: 10px;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-self: flex-start;
+            margin-bottom: 1.5rem;
+            padding: 10px 15px;
+            background: rgba(15, 12, 8, 0.6);
+            border-radius: 18px;
+            border-top-left-radius: 5px;
+            border: 1px solid rgba(242, 195, 139, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        .typing-indicator.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #f2c38b;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typingAnimation 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typingAnimation {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+
+        .home-link {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+
+        .home-link.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .home-icon {
+            width: 32px;
+            height: 32px;
+            filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.5));
+        }
+
+        .home-link:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 600px) {
+            .message-content {
+                max-width: 90%;
+                padding: 0.7rem 1rem;
+            }
+            
+            .profile-image {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader" id="preloader"></div>
+
+    <a href="contents.html" class="home-link" id="homeLink">
+        <img src="./icons/home.png" alt="Home" class="home-icon">
+    </a>
+
+    <div class="stars-container" id="starsContainer"></div>
+    
+    <header class="header" id="header">
+        <h1>About the Owner</h1>
+    </header>
+    
+    <div class="chat-container" id="chatContainer">
+        <div class="chat-message received" style="animation-delay: 0.5s;">
+            <img src="./pictures/profile.jpg" alt="Adrian Vaflor" class="profile-image">
+            <div class="message-content">
+                <div class="message-info">
+                    <span class="sender-name">Adrian Vaflor</span>
+                    <span class="message-time">Online</span>
+                </div>
+                <p>Greetings, traveler! Welcome to my digital grimoire.</p>
+            </div>
+        </div>
+
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+        </div>
+        
+    </div>
+
+    <script>
+        // Preload images
+        const imagesToPreload = [
+            './pictures/page.png',
+            './icons/home.png',
+            './pictures/profile.jpg'
+        ];
+        
+        let imagesLoaded = 0;
+        const totalImages = imagesToPreload.length;
+        
+        function preloadImages() {
+            for (let i = 0; i < totalImages; i++) {
+                const img = new Image();
+                img.src = imagesToPreload[i];
+                img.onload = imageLoaded;
+                img.onerror = imageLoaded;
+            }
+        }
+        
+        function imageLoaded() {
+            imagesLoaded++;
+            if (imagesLoaded >= totalImages) {
+                setTimeout(() => {
+                    document.getElementById('preloader').classList.add('hidden');
+                    document.getElementById('header').classList.add('visible');
+                    document.getElementById('chatContainer').classList.add('visible');
+                    document.getElementById('homeLink').classList.add('visible');
+                    createStars();
+                    startChat();
+                }, 500);
+            }
+        }
+        
+        function createStars() {
+            const starsContainer = document.getElementById('starsContainer');
+            
+            for (let i = 0; i < 150; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                const size = Math.random() * 3 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                star.style.animationDelay = `${Math.random() * 3}s`;
+                star.style.animationDuration = `${Math.random() * 2 + 2}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        function startChat() {
+            const chatContainer = document.getElementById('chatContainer');
+            const typingIndicator = document.getElementById('typingIndicator');
+        
+            function scrollToBottom() {
+                const chatContainer = document.getElementById('chatContainer');
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+
+            const messages = [
+                {
+                    sender: 'Adrian Vaflor',
+                    content: "I'm a third-year BS Computer Science student at the University of the Philippines Cebu.",
+                    delay: 2000
+                },
+                {
+                    sender: 'Adrian Vaflor',
+                    content: "My journey into computer science began with pure curiosity - I've always been fascinated by how computers work and how programs are built from scratch.",
+                    delay: 4000
+                },
+                {
+                    sender: 'Adrian Vaflor',
+                    content: "Most of my apps started as school projects, but I've grown to love coding competitions and personal projects in my free time.",
+                    delay: 6000
+                },
+                {
+                    sender: 'Adrian Vaflor',
+                    content: "There's something magical about solving problems through code and constantly discovering new technologies.",
+                    delay: 8000
+                },
+                {
+                    sender: 'Adrian Vaflor',
+                    content: "Currently maintaining a GPA of 1.56 while striving to grow both academically and practically in this ever-evolving field.",
+                    delay: 10000
+                },
+                {
+                    sender: 'Adrian Vaflor',
+                    content: "Feel free to explore my grimoire to see some of my work and projects!",
+                    delay: 12000
+                }
+            ];
+            
+            let currentMessage = 0;
+            
+            function showNextMessage() {
+                if (currentMessage >= messages.length) return;
+                
+                typingIndicator.classList.add('visible');
+                
+                setTimeout(() => {
+                    typingIndicator.classList.remove('visible');
+                    
+                    const message = messages[currentMessage];
+                    const messageElement = document.createElement('div');
+                    messageElement.className = 'chat-message received';
+                    messageElement.style.animationDelay = '0s';
+                    
+                    messageElement.innerHTML = `
+                        <img src="./pictures/profile.jpg" alt="${message.sender}" class="profile-image">
+                        <div class="message-content">
+                            <div class="message-info">
+                                <span class="sender-name">${message.sender}</span>
+                                <span class="message-time">${getCurrentTime()}</span>
+                            </div>
+                            <p>${message.content}</p>
+                        </div>
+                    `;
+                    
+                    chatContainer.insertBefore(messageElement, typingIndicator);
+                    
+                    setTimeout(() => {
+                        messageElement.style.animation = 'fadeIn 0.5s ease-out forwards';
+                        scrollToBottom();
+                    }, 10);
+                    
+                    currentMessage++;
+                    
+                    if (currentMessage < messages.length) {
+                        setTimeout(showNextMessage, messages[currentMessage].delay);
+                    }
+                }, 1500 + Math.random() * 1000);
+            }
+            
+            setTimeout(() => {
+                showNextMessage();
+                scrollToBottom();
+            }, 2000);
+        }
+        
+        function getCurrentTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            return `${hours}:${minutes} ${ampm}`;
+        }
+        
+        // Start preloading images when the page loads
+        window.addEventListener('load', preloadImages);
+    </script>
+</body>
+</html>

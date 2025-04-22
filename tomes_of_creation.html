@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>The Developer's Grimoire - Tomes of Creation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=MedievalSharp&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cinzel Decorative', 'MedievalSharp', cursive, serif;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #f2c38b;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            position: relative;
+            overflow-x: hidden;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('./pictures/page.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: brightness(0.7);
+            z-index: -2;
+        }
+
+        .stars-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background-color: #f2c38b;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+            opacity: 0;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 0.8; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.3); }
+        }
+
+        /* Preloader styles */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .header {
+            text-align: center;
+            padding: 1rem 0;
+            width: 100%;
+            margin-bottom: 1rem;
+            margin-top: 18px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+        }
+
+        .header.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 6vmin, 3rem);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 2rem;
+            position: relative;
+        }
+
+        .project-container {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+        }
+
+        .project-container.active {
+            display: flex;
+        }
+
+        .project-container.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .project-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            width: 100%;
+        }
+
+        .left-column {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .right-column {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .project-title {
+            font-size: clamp(1.5rem, 4vmin, 2.2rem);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #f2c38b;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        .project-media {
+            width: 100%;
+            margin-bottom: 1rem;
+            position: relative;
+            max-height: 60vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .project-video {
+            width: 100%;
+            border-radius: 3px;
+            display: block;
+            border: 1px solid rgba(242, 195, 139, 0.2);
+            max-height: 60vh;
+            object-fit: contain;
+        }
+
+        .project-video.mobile-video {
+            max-width: 70%;
+            margin: 0 auto;
+        }
+
+        .github-link {
+            display: inline-block;
+            margin-top: 0.5rem;
+            color: #f2c38b;
+            text-decoration: none;
+            font-size: 1rem;
+            text-align: center;
+            padding: 0.5rem;
+            border: 1px solid rgba(242, 195, 139, 0.3);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .github-link:hover {
+            background: rgba(242, 195, 139, 0.1);
+            transform: scale(1.05);
+        }
+
+        .project-description {
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            font-size: clamp(1rem, 3vmin, 1.1rem);
+        }
+
+        .project-details {
+            background: rgba(15, 12, 8, 0.6);
+            border: 1px solid rgba(242, 195, 139, 0.3);
+            border-radius: 3px;
+            padding: 1.5rem;
+            height: 100%;
+            position: relative;
+        }
+
+        .project-details::before {
+            content: "";
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border: 1px solid rgba(242, 195, 139, 0.1);
+            pointer-events: none;
+            border-radius: 2px;
+        }
+
+        .detail-section {
+            margin-bottom: 1rem;
+        }
+
+        .detail-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-size: clamp(1.1rem, 3vmin, 1.2rem);
+            color: #f2c38b;
+        }
+
+        .detail-content {
+            padding-left: 1rem;
+            line-height: 1.5;
+        }
+
+        .navigation-arrows {
+            position: fixed;
+            width: 100%;
+            height: 0;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            z-index: 5;
+            pointer-events: none;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .nav-arrow {
+            background: rgba(15, 12, 8, 0.7);
+            border: 1px solid rgba(242, 195, 139, 0.3);
+            border-radius: 50%;
+            color: #f2c38b;
+            font-size: 1.8rem;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            opacity: 0.7;
+            pointer-events: auto;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            padding: 0;
+            line-height: 1;
+        }
+
+        .nav-arrow:hover {
+            opacity: 1;
+            transform: scale(1.1);
+            background: rgba(15, 12, 8, 0.9);
+        }
+
+        .nav-arrow:disabled {
+            opacity: 0.2;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .home-link {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+
+        .home-link.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .home-icon {
+            width: 32px;
+            height: 32px;
+            filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.5));
+        }
+
+        .home-link:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .project-content {
+                flex-direction: column;
+            }
+            
+            .left-column, .right-column {
+                min-width: 100%;
+            }
+            
+            .project-details {
+                padding: 1rem;
+            }
+            
+            .nav-arrow {
+                width: 40px;
+                height: 40px;
+                font-size: 1.5rem;
+            }
+            
+            .project-media {
+                max-height: 50vh;
+            }
+            
+            .project-video {
+                max-height: 50vh;
+            }
+            
+            .project-video.mobile-video {
+                max-width: 50%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-arrow {
+                width: 35px;
+                height: 35px;
+                font-size: 1.3rem;
+            }
+            
+            .navigation-arrows {
+                padding: 0 10px;
+            }
+            
+            .project-media {
+                max-height: 40vh;
+            }
+            
+            .project-video {
+                max-height: 40vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader" id="preloader"></div>
+
+    <a href="contents.html" class="home-link" id="homeLink">
+        <img src="./icons/home.png" alt="Home" class="home-icon">
+    </a>
+
+    <div class="navigation-arrows">
+        <button class="nav-arrow" id="prevProject" disabled>&#9664;</button>
+        <button class="nav-arrow" id="nextProject">&#9654;</button>
+    </div>
+
+    <div class="stars-container" id="starsContainer"></div>
+    
+    <header class="header" id="header">
+        <h1>Tomes of Creation</h1>
+    </header>
+    
+    <main class="main-content">
+        <!-- Project 1: Color Rush -->
+        <div class="project-container active" id="project-1">
+            <div class="project-content">
+                <div class="left-column">
+                    <h2 class="project-title">Color Rush</h2>
+                    
+                    <div class="project-media">
+                        <video class="project-video" controls poster="./projects/color-rush-preview.png">
+                            <source src="./projects/Color Rush Trailer.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    
+                    <a href="https://github.com/DaRainFlavor/Color-Rush" class="github-link" target="_blank">
+                        View on GitHub
+                    </a>
+                </div>
+                
+                <div class="right-column">
+                    <div class="project-details">
+                        <p class="project-description">
+                            A game from CS 123 class showcasing the use of data structures and graph traversal. 
+                            It is a flood filling game where the player is given number of moves to fill the grid to a single color.
+                        </p>
+                        
+                        <div class="detail-section">
+                            <div class="detail-title">Tech Stack:</div>
+                            <div class="detail-content">
+                                <ul>
+                                    <li>C++</li>
+                                    <li>SFML</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-section">
+                            <div class="detail-title">Role:</div>
+                            <div class="detail-content">
+                                Indie Developer and Designer
+                            </div>
+                        </div>
+                        
+                        <div class="detail-section">
+                            <div class="detail-title">Development Insights:</div>
+                            <div class="detail-content">
+                                This project demonstrates the use of pointers, the application of BFS traversal, 
+                                file reading and file writing, and a solver that uses my developed n-depth solution algorithm.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project 2: Compiley Studio & BrainRot -->
+        <div class="project-container" id="project-2">
+            <div class="project-content">
+                <div class="left-column">
+                    <h2 class="project-title">Compiley Studio & BrainRot</h2>
+                    
+                    <div class="project-media">
+                        <video class="project-video" controls poster="./projects/compiley-studio-brainrot-preview.png">
+                            <source src="./projects/Compiley Studio and Brainrot demo.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    
+                    <a href="https://github.com/DaRainFlavor/CMSC-124-PL-Project" class="github-link" target="_blank">
+                        View on GitHub
+                    </a>
+                </div>
+                
+                <div class="right-column">
+                    <div class="project-details">
+                        <p class="project-description">
+                            An all-in-one IDE, compiler, and esoteric programming language combined whose syntax is inspired by Gen-Z and Gen Alpha terms and slang.
+                        </p>
+                        
+                        <div class="detail-section">
+                            <div class="detail-title">Tech Stack:</div>
+                            <div class="detail-content">
+                                <ul>
+                                    <li>Python</li>
+                                    <li>Tkinter</li>
+                                    <li>MIPS</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-section">
+                            <div class="detail-title">Role:</div>
+                            <div class="detail-content">
+                                Project Lead / Primary Developer
+                            </div>
+                        </div>
+                        
+                        <div class="detail-section">
+                            <div class="detail-title">Development Insights:</div>
+                            <div class="detail-content">
+                                This has been the most challenging, time-consuming, and fulfilling project I've ever created. It pushed me to dive deep into IDE development, grammar and parser design, language translation, syntax and semantics, speech to text, assembly, and even AI.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project 3: Inspectify - Added mobile-video class -->
+        <div class="project-container" id="project-3">
+            <div class="project-content">
+                <div class="left-column">
+                    <h2 class="project-title">Inspectify (In Progress)</h2>
+                    
+                    <div class="project-media">
+                        <video class="project-video mobile-video" controls poster="./projects/inspectify-preview.png">
+                            <source src="./projects/inspectify.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    
+                    <h1 class="github-link">
+                        Currently in Progress apk file
+                    </h1>
+                </div>
+                
+                <div class="right-column">
+                    <div class="project-details">
+                        <p class="project-description">
+                            An AI-powered home assessment app that analyzes uploaded or taken photos to detect damage, generate reports, locate nearby repair services and emergency contacts, and provide disaster risk advice.
+                        </p>
+                        
+                        <div class="detail-section">
+                            <div class="detail-title">Tech Stack:</div>
+                            <div class="detail-content">
+                                <ul>
+                                    <li>React Native + Expo, Flask, MySQL, Railway, Cloudinary</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-section">
+                            <div class="detail-title">Role:</div>
+                            <div class="detail-content">
+                                Full-Stack Developer (Backend and AI Focus)
+                            </div>
+                        </div>
+                        
+                        <div class="detail-section">
+                            <div class="detail-title">Development Insights:</div>
+                            <div class="detail-content">
+                                This project made me have a clear view on how mobile apps are created from start to finish. This also made me use of the recently published spatial understanding by Gemini.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project 4: 9 Mazes of Hell -->
+        <div class="project-container" id="project-4">
+            <div class="project-content">
+                <div class="left-column">
+                    <h2 class="project-title">9 Mazes of Hell</h2>
+                    
+                    <div class="project-media">
+                        <video class="project-video" controls poster="./projects/9-mazes-of-hell-preview.png">
+                            <source src="./projects/9 Mazes of Hell Gameplay.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    
+                    <a href="https://github.com/DaRainFlavor/9-Mazes-of-Hell" class="github-link" target="_blank">
+                        View on GitHub
+                    </a>
+                </div>
+                
+                <div class="right-column">
+                    <div class="project-details">
+                        <p class="project-description">
+                            A web game where players control Raphael as he navigates the 9 Mazes of Hell to rescue his beloved Constance from the Devil. 
+                        </p>
+                        
+                        <div class="detail-section">
+                            <div class="detail-title">Tech Stack:</div>
+                            <div class="detail-content">
+                                <ul>
+                                    <li>HTML, CSS, JS, Phaser</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-section">
+                            <div class="detail-title">Role:</div>
+                            <div class="detail-content">
+                                Game Concept Creator, Music Composer (main menu and game play), Project Lead
+                            </div>
+                        </div>
+                        
+                        <div class="detail-section">
+                            <div class="detail-title">Development Insights:</div>
+                            <div class="detail-content">
+                                This is my first time developing a web game. I've learned how to create maps, how moving sprites work, and the collision detection.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </main>
+
+    <script>
+        // Project navigation functionality
+        const projects = document.querySelectorAll('.project-container');
+        const prevButton = document.getElementById('prevProject');
+        const nextButton = document.getElementById('nextProject');
+        let currentProjectIndex = 0;
+
+        function updateProjectVisibility() {
+            // Hide all projects
+            projects.forEach((project, index) => {
+                project.classList.remove('active');
+                if (index === currentProjectIndex) {
+                    project.classList.add('active');
+                }
+            });
+
+            // Update navigation buttons
+            prevButton.disabled = currentProjectIndex === 0;
+            nextButton.disabled = currentProjectIndex === projects.length - 1;
+        }
+
+        prevButton.addEventListener('click', function() {
+            if (currentProjectIndex > 0) {
+                currentProjectIndex--;
+                updateProjectVisibility();
+            }
+        });
+
+        nextButton.addEventListener('click', function() {
+            if (currentProjectIndex < projects.length - 1) {
+                currentProjectIndex++;
+                updateProjectVisibility();
+            }
+        });
+
+        // Preload images
+        const imagesToPreload = [
+            './pictures/page.png',
+            './icons/home.png',
+            './projects/color-rush-preview.png',
+            './projects/compiley-studio-brainrot-preview.png',
+            './projects/inspectify-preview.png',
+            './projects/9-mazes-of-hell-preview.png'
+        ];
+        
+        let imagesLoaded = 0;
+        const totalImages = imagesToPreload.length;
+        
+        function preloadImages() {
+            for (let i = 0; i < totalImages; i++) {
+                const img = new Image();
+                img.src = imagesToPreload[i];
+                img.onload = imageLoaded;
+                img.onerror = imageLoaded; // Count errors as loaded to prevent blocking
+            }
+        }
+        
+        function imageLoaded() {
+            imagesLoaded++;
+            if (imagesLoaded >= totalImages) {
+                // All images are loaded
+                setTimeout(() => {
+                    document.getElementById('preloader').classList.add('hidden');
+                    document.getElementById('header').classList.add('visible');
+                    projects.forEach(project => project.classList.add('visible'));
+                    document.getElementById('homeLink').classList.add('visible');
+                    createStars();
+                    updateProjectVisibility(); // Initialize project visibility
+                }, 500); // Small delay for smooth transition
+            }
+        }
+        
+        function createStars() {
+            const starsContainer = document.getElementById('starsContainer');
+            
+            for (let i = 0; i < 150; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                const size = Math.random() * 3 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                star.style.animationDelay = `${Math.random() * 3}s`;
+                star.style.animationDuration = `${Math.random() * 2 + 2}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // Start preloading images when the page loads
+        window.addEventListener('load', preloadImages);
+    </script>
+</body>
+</html>

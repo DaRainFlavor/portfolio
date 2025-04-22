@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>The Developer's Grimoire - Inner Light</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=MedievalSharp&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cinzel Decorative', 'MedievalSharp', cursive, serif;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #f2c38b;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            position: relative;
+            overflow: hidden;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('./pictures/page.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: brightness(0.7);
+            z-index: -2;
+        }
+
+        .stars-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background-color: #f2c38b;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+            opacity: 0;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 0.8; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.3); }
+        }
+
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .header {
+            text-align: center;
+            padding: 1rem 0;
+            width: 100%;
+            margin-bottom: 1rem;
+            margin-top: 18px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+        }
+
+        .header.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 6vmin, 3rem);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .home-link {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+
+        .home-link.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .home-icon {
+            width: 32px;
+            height: 32px;
+            filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.5));
+        }
+
+        .home-link:hover {
+            transform: scale(1.1);
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 1rem;
+            width: 90%;
+            max-width: 1200px;
+            height: calc(100vh - 150px);
+            max-height: 700px;
+            margin: 0 auto;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+        }
+
+        .cards-container.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .card {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            perspective: 1500px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(15, 12, 8, 0.8);
+            border: 2px solid rgba(242, 195, 139, 0.5);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, rgba(40, 30, 20, 0.9), rgba(15, 12, 8, 0.9));
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            overflow: auto;
+            text-align: left;
+        }
+
+        .card-icon {
+            width: 50%;
+            max-width: 80px;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.7));
+        }
+
+        .card-title {
+            margin-top: 1rem;
+            font-size: clamp(0.9rem, 3vmin, 1.2rem);
+            text-align: center;
+        }
+
+        .card-back h3 {
+            font-size: clamp(1rem, 3vmin, 1.3rem);
+            margin-bottom: 0.5rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(242, 195, 139, 0.3);
+            padding-bottom: 0.5rem;
+            width: 100%;
+        }
+
+        .card-back ul {
+            font-family: 'MedievalSharp', cursive;
+            font-size: clamp(0.8rem, 2vmin, 1rem);
+            list-style-position: inside;
+            margin-top: 0.5rem;
+            padding-left: 0.5rem;
+        }
+
+        .card-back li {
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 0.5rem;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            width: 80%;
+            max-width: 500px;
+            max-height: 80vh;
+            background: linear-gradient(135deg, rgba(40, 30, 20, 0.95), rgba(15, 12, 8, 0.95));
+            border: 3px solid rgba(242, 195, 139, 0.7);
+            border-radius: 15px;
+            padding: 2rem;
+            position: relative;
+            overflow: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.visible .modal-content {
+            transform: scale(1);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #f2c38b;
+            background: none;
+            border: none;
+            outline: none;
+        }
+
+        .modal-icon {
+            width: 60px;
+            margin: 0 auto 1rem;
+            display: block;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.7));
+        }
+
+        .modal h3 {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid rgba(242, 195, 139, 0.5);
+            padding-bottom: 0.5rem;
+        }
+
+        .modal ul {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+            list-style-type: none;
+        }
+
+        .modal li {
+            margin-bottom: 1rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .modal li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #f2c38b;
+        }
+
+        @keyframes cardSelect {
+            0% { transform: translateY(0) rotateZ(0); }
+            50% { transform: translateY(-20px) rotateZ(-5deg); }
+            100% { transform: translateY(0) rotateZ(0); }
+        }
+
+        @media (max-width: 1200px) {
+            .cards-container {
+                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .cards-container {
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(3, 1fr);
+                height: calc(100vh - 120px);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .cards-container {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(4, 1fr);
+            }
+            
+            .card-title {
+                font-size: clamp(0.8rem, 3vmin, 1rem);
+            }
+            
+            .card-back h3 {
+                font-size: clamp(0.9rem, 3vmin, 1.1rem);
+            }
+            
+            .card-back ul {
+                font-size: clamp(0.7rem, 2vmin, 0.9rem);
+            }
+        }
+
+        @media (max-width: 400px) {
+            .cards-container {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(4, 1fr);
+                gap: 0.5rem;
+            }
+        }
+
+        @media (max-height: 500px) {
+            .cards-container {
+                height: calc(100vh - 100px);
+                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: repeat(2, 1fr);
+            }
+            
+            h1 {
+                font-size: clamp(1.2rem, 4vmin, 2rem);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader" id="preloader"></div>
+
+    <a href="contents.html" class="home-link" id="homeLink">
+        <img src="./icons/home.png" alt="Home" class="home-icon">
+    </a>
+
+    <div class="stars-container" id="starsContainer"></div>
+    
+    <header class="header" id="header">
+        <h1>The Inner Light</h1>
+    </header>
+    
+    <div class="cards-container" id="cardsContainer">
+        <div class="card" data-skill="communication">
+            <div class="card-inner">
+                <div class="card-front">
+                    <img src="./icons/communication.png" alt="Communication" class="card-icon">
+                    <div class="card-title">Communication</div>
+                </div>
+                <div class="card-back">
+                    <h3>Communication</h3>
+                    <ul>
+                        <li>Explaining technical concepts to non-technical people</li>
+                        <li>Writing clear documentation or reports</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card" data-skill="teamwork">
+            <div class="card-inner">
+                <div class="card-front">
+                    <img src="./icons/teamwork.png" alt="Teamwork" class="card-icon">
+                    <div class="card-title">Teamwork & Collaboration</div>
+                </div>
+                <div class="card-back">
+                    <h3>Teamwork & Collaboration</h3>
+                    <ul>
+                        <li>Working well in group projects, open source, or Agile teams</li>
+                        <li>Using tools like Git to collaborate efficiently</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card" data-skill="problem_solving">
+            <div class="card-inner">
+                <div class="card-front">
+                    <img src="./icons/problem_solving.png" alt="Problem Solving" class="card-icon">
+                    <div class="card-title">Problem Solving</div>
+                </div>
+                <div class="card-back">
+                    <h3>Problem Solving</h3>
+                    <ul>
+                        <li>Debugging and planning with a structured mindset</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card" data-skill="adaptability">
+            <div class="card-inner">
+                <div class="card-front">
+                    <img src="./icons/adaptability.png" alt="Adaptability" class="card-icon">
+                    <div class="card-title">Adaptability</div>
+                </div>
+                <div class="card-back">
+                    <h3>Adaptability</h3>
+                    <ul>
+                        <li>Learning new languages, frameworks, or adjusting to new team environments quickly</li>
+                        <li>Embracing change and evolving technologies</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card" data-skill="time_management">
+            <div class="card-inner">
+                <div class="card-front">
+                    <img src="./icons/time_management.png" alt="Time Management" class="card-icon">
+                    <div class="card-title">Time Management</div>
+                </div>
+                <div class="card-back">
+                    <h3>Time Management</h3>
+                    <ul>
+                        <li>Balancing multiple deadlines (school + side projects + maybe even work)</li>
+                        <li>Keeps a todo list</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card" data-skill="Hardwork">
+            <div class="card-inner">
+                <div class="card-front">
+                    <img src="./icons/hardwork.png" alt="Hard Work" class="card-icon">
+                    <div class="card-title">Hardwork</div>
+                </div>
+                <div class="card-back">
+                    <h3>Hardwork</h3>
+                    <ul>
+                        <li>Does not give up easily</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card" data-skill="leadership">
+            <div class="card-inner">
+                <div class="card-front">
+                    <img src="./icons/leadership.png" alt="Leadership" class="card-icon">
+                    <div class="card-title">Leadership</div>
+                </div>
+                <div class="card-back">
+                    <h3>Leadership</h3>
+                    <ul>
+                        <li>Leading a team project</li>
+                        <li>Mentoring others or taking initiative</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card" data-skill="attention_to_detail">
+            <div class="card-inner">
+                <div class="card-front">
+                    <img src="./icons/attention_to_detail.png" alt="Attention to Detail" class="card-icon">
+                    <div class="card-title">Attention to Detail</div>
+                </div>
+                <div class="card-back">
+                    <h3>Attention to Detail</h3>
+                    <ul>
+                        <li>Writing clean, maintainable code</li>
+                        <li>Spotting issues during code review or QA</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="cardModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeModal">×</button>
+            <img src="" alt="" class="modal-icon" id="modalIcon">
+            <h3 id="modalTitle"></h3>
+            <ul id="modalList"></ul>
+        </div>
+    </div>
+
+    <script>
+        // Preload images
+        const imagesToPreload = [
+            './pictures/page.png',
+            './icons/home.png',
+            './icons/communication.png',
+            './icons/teamwork.png',
+            './icons/problem_solving.png',
+            './icons/adaptability.png',
+            './icons/time_management.png',
+            './icons/hardwork.png',
+            './icons/leadership.png',
+            './icons/attention_to_detail.png'
+        ];
+        
+        let imagesLoaded = 0;
+        const totalImages = imagesToPreload.length;
+        
+        function preloadImages() {
+            for (let i = 0; i < totalImages; i++) {
+                const img = new Image();
+                img.src = imagesToPreload[i];
+                img.onload = imageLoaded;
+                img.onerror = imageLoaded;
+            }
+        }
+        
+        function imageLoaded() {
+            imagesLoaded++;
+            if (imagesLoaded >= totalImages) {
+                setTimeout(() => {
+                    document.getElementById('preloader').classList.add('hidden');
+                    document.getElementById('header').classList.add('visible');
+                    document.getElementById('cardsContainer').classList.add('visible');
+                    document.getElementById('homeLink').classList.add('visible');
+                    createStars();
+                }, 500);
+            }
+        }
+        
+        function createStars() {
+            const starsContainer = document.getElementById('starsContainer');
+            
+            for (let i = 0; i < 150; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                const size = Math.random() * 3 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                star.style.animationDelay = `${Math.random() * 3}s`;
+                star.style.animationDuration = `${Math.random() * 2 + 2}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        window.addEventListener('load', preloadImages);
+        
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', function() {
+                const skill = this.getAttribute('data-skill');
+                const icon = this.querySelector('.card-icon').src;
+                const title = this.querySelector('.card-title').textContent;
+                const listItems = Array.from(this.querySelectorAll('.card-back li')).map(li => li.textContent);
+                
+                document.getElementById('modalIcon').src = icon;
+                document.getElementById('modalIcon').alt = title;
+                document.getElementById('modalTitle').textContent = title;
+                
+                const modalList = document.getElementById('modalList');
+                modalList.innerHTML = '';
+                listItems.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item;
+                    modalList.appendChild(li);
+                });
+                
+                this.style.animation = 'cardSelect 0.5s forwards';
+                
+                setTimeout(() => {
+                    document.getElementById('cardModal').classList.add('visible');
+                }, 300);
+            });
+        });
+        
+        document.getElementById('closeModal').addEventListener('click', function() {
+            document.getElementById('cardModal').classList.remove('visible');
+            
+            document.querySelectorAll('.card').forEach(card => {
+                card.style.animation = '';
+            });
+        });
+        
+        document.getElementById('cardModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                this.classList.remove('visible');
+                
+                document.querySelectorAll('.card').forEach(card => {
+                    card.style.animation = '';
+                });
+            }
+        });
+        
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.querySelector('.card-inner').style.transform = 'rotateY(180deg)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.querySelector('.card-inner').style.transform = 'rotateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>

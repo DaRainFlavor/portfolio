@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>The Developer's Grimoire - Whispers Across Realms</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=MedievalSharp&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cinzel Decorative', 'MedievalSharp', cursive, serif;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #f2c38b;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            position: relative;
+            overflow: hidden;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('./pictures/page.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: brightness(0.7);
+            z-index: -2;
+        }
+
+        .stars-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background-color: #f2c38b;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+            opacity: 0;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 0.8; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.3); }
+        }
+
+        /* Preloader styles */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .header {
+            text-align: center;
+            padding: 1rem 0;
+            width: 100%;
+            margin-bottom: 1rem;
+            margin-top: 18px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+        }
+
+        .header.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 6vmin, 3rem);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .contact-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+        }
+
+        .contact-container.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .contact-description {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: clamp(1rem, 3vmin, 1.2rem);
+            line-height: 1.6;
+            max-width: 700px;
+        }
+
+        .social-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .social-item {
+            position: relative;
+            padding: 1.5rem;
+            background: rgba(15, 12, 8, 0.6);
+            border: 1px solid rgba(242, 195, 139, 0.3);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+            font-size: clamp(1rem, 2.5vmin, 1.2rem);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 160px;
+            flex-grow: 1;
+            max-width: 200px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .social-item:hover {
+            background: rgba(242, 195, 139, 0.1);
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            border-color: rgba(242, 195, 139, 0.6);
+        }
+
+        .social-item::before {
+            content: "";
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border: 1px solid rgba(242, 195, 139, 0.1);
+            pointer-events: none;
+            border-radius: 4px;
+        }
+
+        .social-item:hover::before {
+            border-color: rgba(242, 195, 139, 0.3);
+        }
+
+        .social-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.7rem;
+            transition: all 0.3s ease;
+            filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.5));
+        }
+
+        .social-item:hover .social-icon {
+            transform: scale(1.15);
+        }
+
+        .social-name {
+            margin-bottom: 0.4rem;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .social-username {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            word-break: break-all;
+        }
+
+        .home-link {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+
+        .home-link.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .home-icon {
+            width: 32px;
+            height: 32px;
+            filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.5));
+        }
+
+        .home-link:hover {
+            transform: scale(1.1);
+        }
+
+        /* Platform-specific colors */
+        .facebook { color: #1877f2; }
+        .instagram { color: #e4405f; }
+        .linkedin { color: #0a66c2; }
+        .github { color: #f0f6fc; }
+        .gmail { color: #ea4335; }
+
+        /* Rune decoration */
+        .rune-decoration {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.3;
+        }
+
+        .rune-top-left {
+            top: 8px;
+            left: 8px;
+        }
+
+        .rune-top-right {
+            top: 8px;
+            right: 8px;
+            transform: rotate(90deg);
+        }
+
+        .rune-bottom-left {
+            bottom: 8px;
+            left: 8px;
+            transform: rotate(270deg);
+        }
+
+        .rune-bottom-right {
+            bottom: 8px;
+            right: 8px;
+            transform: rotate(180deg);
+        }
+
+        @media (max-width: 768px) {
+            .social-row {
+                gap: 1rem;
+            }
+            
+            .social-item {
+                min-width: 130px;
+                padding: 1.2rem;
+                max-width: 160px;
+            }
+            
+            .social-icon {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .social-row {
+                gap: 0.8rem;
+            }
+            
+            .social-item {
+                min-width: 110px;
+                padding: 1rem;
+                font-size: 0.9rem;
+                max-width: 140px;
+            }
+            
+            .social-icon {
+                font-size: 1.8rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .social-name {
+                font-size: 0.9rem;
+            }
+            
+            .social-username {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader" id="preloader"></div>
+
+    <a href="contents.html" class="home-link" id="homeLink">
+        <img src="./icons/home.png" alt="Home" class="home-icon">
+    </a>
+
+    <div class="stars-container" id="starsContainer"></div>
+    
+    <header class="header" id="header">
+        <h1>Whispers Across Realms</h1>
+    </header>
+    
+    <div class="contact-container" id="contactContainer">
+        <div class="contact-description">
+            <p>Send a raven—or, you know, pick your favorite way to reach me. Whether it's a quick message, a shared spell, or a peek into my latest works, I'm just a whisper away.</p>
+        </div>
+        
+        <div class="social-row">
+            <div class="social-item" onclick="window.open('https://facebook.com/AdrianVaflor', '_blank')">
+                <span class="rune-decoration rune-top-left">ᚠ</span>
+                <span class="rune-decoration rune-bottom-right">ᚠ</span>
+                <i class="fab fa-facebook social-icon facebook"></i>
+                <div class="social-name">Facebook</div>
+                <div class="social-username">/AdrianVaflor</div>
+            </div>
+            
+            <div class="social-item" onclick="window.open('https://instagram.com/AdrianVaflor', '_blank')">
+                <span class="rune-decoration rune-top-right">ᚢ</span>
+                <span class="rune-decoration rune-bottom-left">ᚢ</span>
+                <i class="fab fa-instagram social-icon instagram"></i>
+                <div class="social-name">Instagram</div>
+                <div class="social-username">@AdrianVaflor</div>
+            </div>
+            
+            <div class="social-item" onclick="window.open('https://www.linkedin.com/in/AdrianVaflor', '_blank')">
+                <span class="rune-decoration rune-top-left">ᚦ</span>
+                <span class="rune-decoration rune-bottom-right">ᚦ</span>
+                <i class="fab fa-linkedin social-icon linkedin"></i>
+                <div class="social-name">LinkedIn</div>
+                <div class="social-username">/in/AdrianVaflor</div>
+            </div>
+            
+            <div class="social-item" onclick="window.open('https://github.com/DaRainFlavor', '_blank')">
+                <span class="rune-decoration rune-top-right">ᚨ</span>
+                <span class="rune-decoration rune-bottom-left">ᚨ</span>
+                <i class="fab fa-github social-icon github"></i>
+                <div class="social-name">GitHub</div>
+                <div class="social-username">/DaRainFlavor</div>
+            </div>
+            
+            <div class="social-item" onclick="copyEmail('adrianvaflor9@gmail.com')">
+                <span class="rune-decoration rune-top-left">ᚱ</span>
+                <span class="rune-decoration rune-bottom-right">ᚱ</span>
+                <i class="fas fa-envelope social-icon gmail"></i>
+                <div class="social-name">Gmail</div>
+                <div class="social-username">adrianvaflor9@gmail.com</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Preload images
+        const imagesToPreload = [
+            './pictures/page.png',
+            './icons/home.png'
+        ];
+        
+        let imagesLoaded = 0;
+        const totalImages = imagesToPreload.length;
+        
+        
+        function preloadImages() {
+            for (let i = 0; i < totalImages; i++) {
+                const img = new Image();
+                img.src = imagesToPreload[i];
+                img.onload = imageLoaded;
+                img.onerror = imageLoaded;
+            }
+        }
+        
+
+        function imageLoaded() {
+            imagesLoaded++;
+            if (imagesLoaded >= totalImages) {
+                setTimeout(() => {
+                    document.getElementById('preloader').classList.add('hidden');
+                    document.getElementById('header').classList.add('visible');
+                    document.getElementById('contactContainer').classList.add('visible');
+                    document.getElementById('homeLink').classList.add('visible');
+                    createStars();
+                }, 500);
+            }
+        }
+        
+
+        function copyEmail(email) {
+            navigator.clipboard.writeText(email).then(() => {
+                alert("Email copied to clipboard: " + email);
+            }).catch(err => {
+                console.error("Failed to copy email: ", err);
+                alert("Failed to copy email.");
+            });
+        }
+
+        function createStars() {
+            const starsContainer = document.getElementById('starsContainer');
+            
+            for (let i = 0; i < 150; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                const size = Math.random() * 3 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                star.style.animationDelay = `${Math.random() * 3}s`;
+                star.style.animationDuration = `${Math.random() * 2 + 2}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // Start preloading images when the page loads
+        window.addEventListener('load', preloadImages);
+    </script>
+</body>
+</html>
