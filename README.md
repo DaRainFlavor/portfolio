@@ -1,4 +1,4 @@
-# My Portfolio
+# The Developer's Grimoire
 
 Welcome to my portfolio repository!
 
